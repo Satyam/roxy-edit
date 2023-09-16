@@ -1,6 +1,8 @@
+import express from 'express';
 import open from 'open';
 
-import express from 'express';
+import { loadInfo } from './data.js';
+import { initImages } from './images.js';
 
 const app = express();
 const port = 3000;
@@ -17,5 +19,7 @@ app.get('/exit/:code?', (req, res) => {
 
 app.listen(port, async () => {
   console.log(`Example app listening on port ${port}`);
+  await loadInfo();
+  await initImages();
   await open(`http://localhost:${port}`);
 });
