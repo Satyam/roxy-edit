@@ -1,0 +1,361 @@
+body {
+  font-family: sans-serif;
+}
+header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: black solid thin;
+  margin-bottom: 0.5rem;
+}
+
+header button {
+  width: 80%;
+}
+
+main {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+label .text-input {
+  margin-left: 1rem;
+  display: block;
+}
+fieldset {
+  margin-bottom: 1rem;
+  border-color: canvas;
+}
+section {
+  clear: both;
+}
+#initial button {
+  display: block;
+  margin: 1rem;
+}
+
+#suneditor {
+  width: 100%;
+}
+
+.two-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+
+.sun-editor button > svg {
+  height: 12px;
+  width: 12px;
+}
+
+.sun-editor .se-btn {
+  height: 30px;
+  width: 30px;
+}
+
+.sun-editor .se-btn-tray {
+  padding: 3px 2px 0%;
+}
+
+#fileList {
+  font-size: 14px;
+  display: none;
+  cursor: pointer;
+}
+
+#fileList.post-list,
+#fileList.page-list,
+#fileList.draft-post-list,
+#fileList.draft-page-list {
+  display: block;
+}
+#fileList.post-list details ul {
+  margin-top: 3px;
+}
+#fileList.post-list details > details {
+  margin-left: 1rem;
+}
+
+#fileList.post-list details p {
+  margin-block-start: 3px;
+  margin-block-end: 3px;
+  margin-left: 1rem;
+}
+
+.wide {
+  width: 90%;
+}
+#select,
+#editor,
+#menuEditor,
+#site {
+  display: none;
+}
+#main.select #select {
+  display: block;
+}
+
+#main.edit #editor {
+  display: block;
+}
+
+#main.menu #menuEditor {
+  display: block;
+}
+#main.site #site {
+  display: block;
+}
+
+#form {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+}
+#form.is-page #postExtra {
+  display: none;
+}
+#form.is-post #postExtra {
+  display: block;
+}
+
+.error {
+  visibility: hidden;
+  font-size: x-small;
+  color: red;
+  margin-left: 2rem;
+}
+.invalid .error {
+  visibility: visible;
+}
+.invalid input {
+  border-color: red;
+}
+
+.two-halves {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.two-halves input,
+.two-halves select {
+  width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 6px 14px;
+  background-color: #e7e7e7;
+  color: black;
+  margin: 8px 20px;
+  border: none;
+} /* Gray */
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.default {
+  background-color: #008cba;
+} /* Blue */
+
+button.warning {
+  background-color: #f44336;
+} /* Red */
+/* .button1 {
+  background-color: #4caf50;
+} /* Green */
+/* .button5 {
+  background-color: #555555;
+} Black */
+
+dialog {
+  text-align: center;
+  padding: 0;
+}
+dialog h1 {
+  margin: 0;
+  padding-bottom: 0.5rem;
+  background-color: lightblue;
+  border-bottom: thin solid;
+}
+
+#confirmMsg {
+  padding: 1rem;
+  border-bottom: thin solid;
+}
+
+canvas {
+  display: none;
+}
+
+.selection {
+  cursor: pointer;
+  list-style-type: none;
+  margin-top: 2px;
+  padding-left: 0.5rem;
+  border: solid silver thin;
+  max-height: 5rem;
+  overflow-y: scroll;
+}
+
+.selectedItems {
+  cursor: pointer;
+  list-style-type: none;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  max-height: 8rem;
+  overflow-y: scroll;
+}
+
+li.can-t-edit {
+  cursor: no-drop;
+}
+
+#terminal {
+  background-color: black;
+  color: white;
+  padding: 1rem;
+  max-height: 800px;
+  overflow-y: scroll;
+}
+
+#menuEditor {
+  cursor: default;
+  font-size: 14px;
+}
+
+#menuEditor ul {
+  list-style-type: none;
+  padding-left: 1rem;
+}
+#menuEditor ul ul {
+  margin-left: 1rem;
+}
+
+#menuEditor li {
+  background-color: #e6e6e6;
+  border: thin solid gray;
+  border-radius: 0.2rem;
+}
+#menuEditor li li {
+  background-color: #cccccc;
+}
+#menuEditor li li li {
+  background-color: #b3b3b3;
+}
+li.empty {
+  opacity: 0.5;
+}
+.sortable-ghost {
+  opacity: 0.5;
+}
+.sortable-chosen {
+  font-weight: bold;
+}
+.sortable-drag {
+  background-color: black;
+}
+
+span[contentEditable] {
+  cursor: text;
+}
+
+ul.draggable li {
+  cursor: grab;
+}
+.icon-left {
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: center;
+  height: 1rem;
+  width: 1.5rem;
+  display: inline-block;
+}
+.icon-right {
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: right;
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+.delete {
+  background-image: url(icons/trash-can-outline.svg);
+}
+.new-folder {
+  background-image: url(icons/folder-plus-outline.svg);
+}
+
+.updown {
+  background-image: url(icons/arrow-up-down-bold-outline.svg);
+}
+.save {
+  background-image: url(icons/content-save-outline.svg);
+}
+
+.folder {
+  background-image: url(icons/folder-outline.svg);
+}
+.document {
+  background-image: url(icons/file-document-outline.svg);
+}
+.documents {
+  background-image: url(icons/file-document-multiple-outline.svg);
+}
+.back {
+  background-image: url(icons/arrow-top-left-bold-outline.svg);
+}
+.new-doc {
+  background-image: url(icons/file-document-plus-outline.svg);
+}
+
+.edit-doc {
+  background-image: url(icons/file-document-edit-outline.svg);
+}
+.draft-doc {
+  background-image: url(icons/file-sign.svg);
+}
+.edit-menu {
+  background-image: url(icons/playlist-edit.svg);
+}
+.exit {
+  background-image: url(icons/exit-to-app.svg);
+}
+.cloud {
+  background-image: url(icons/cloud-circle-outline.svg);
+}
+.upload {
+  background-image: url(icons/cloud-upload-outline.svg);
+}
+.viewLocal {
+  background-image: url(icons/eye-circle-outline.svg);
+}
+.generate {
+  background-image: url(icons/cloud-refresh-variant-outline.svg);
+}
+.home {
+  background-image: url(icons/home-outline.svg);
+}
+
+.satyam-pages-link {
+  font-size: 14px;
+}
+.satyam-pages-link ul {
+  padding-left: 1rem;
+}
+.satyam-pages-link details > details {
+  padding-left: 1rem;
+}
