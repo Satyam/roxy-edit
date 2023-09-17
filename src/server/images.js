@@ -1,30 +1,19 @@
+import express from 'express';
 import { join } from 'node:path';
-import { readJson, writeJson } from './utils';
-import { HEXO_IMG_DIR, EDITOR_IMG_DIR, IMG_DIR } from './data';
+import { HEXO_IMG_DIR, IMG_DIR } from './data.js';
 import { readdir } from 'fs/promises';
 
-let gallery = null;
+export const imgRouter = new express.Router();
 
-const addImageToGallery = async (image) => {
-  const src = join(IMG_DIR, image);
-  if (!gallery.result.find((item) => item.src === src)) {
-    gallery.result.push({ src });
-    await writeJson(join(EDITOR_IMG_DIR, 'gallery.json'), gallery);
-  }
-};
+imgRouter.get('/gallery', async (req, res) => {
+  const fileDescrs = await readdir(HEXO_IMG_DIR, { withFileTypes: true });
 
-export const initImages = async () => {
-  gallery = await readJson(join(EDITOR_IMG_DIR, 'gallery.json'), {
+  res.json({
     statusCode: 200,
-    result: [],
+    result: fileDescrs
+      .filter((d) => d.isFile())
+      .map((d) => ({ src: join(IMG_DIR, d.name) })),
   });
+});
 
-  await fs.copy(HEXO_IMG_DIR, EDITOR_IMG_DIR, { overwrite: false });
-
-  return Promise.all(readdir(EDITOR_IMG_DIR, { withFileTypes: true })).then(
-    (files) =>
-      files
-        .filter((d) => d.isFile() && d.name !== 'gallery.json')
-        .map((d) => addImageToGallery(d.name))
-  );
-};
+export default imgRouter;
