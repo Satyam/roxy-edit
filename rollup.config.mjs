@@ -9,6 +9,9 @@ export default [
       file: 'public/main.js',
       format: 'cjs',
     },
+    watch: {
+      include: ['src/client/**', 'src/common/**'],
+    },
     plugins: [nodeResolve(), commonjs()],
   },
   {
@@ -16,6 +19,9 @@ export default [
     output: {
       file: 'server/index.js',
       format: 'es',
+    },
+    watch: {
+      include: ['src/server/**', 'src/common/**'],
     },
     plugins: [nodeResolve(), commonjs(), json()],
     // external: [/node_modules/],
