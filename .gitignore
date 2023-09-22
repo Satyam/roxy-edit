@@ -130,6 +130,6 @@ dist
 .pnp.*
 # satyam
 
-public/main.js
-hexo/
-server/
+/public/main.js
+/hexo/
+/server/
