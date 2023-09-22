@@ -1,10 +1,10 @@
 import express from 'express';
 import { join } from 'node:path';
 import { readJson, writeJson } from './utils.js';
-import { fileName, isPost, isNew } from '../common/state.js';
 
-export const HEXO_DIR = 'hexo/';
-export const DOCUMENT_ROOT = 'server/';
+export const CWD = process.cwd();
+export const HEXO_DIR = join(CWD, 'hexo/');
+export const DOCUMENT_ROOT = join(CWD, 'server/');
 export const IMG_DIR = 'assets/img/';
 // export const HEXO_FILES_LIST = join(HEXO_DIR, 'files.json');
 export const SRC_PAGES_DIR = join(HEXO_DIR, 'source/');
