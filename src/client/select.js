@@ -1,6 +1,5 @@
 import { sortDescending, slugify, today, onClick } from './utils';
 import { setDataLists, setForm, acceptChanges } from './form';
-
 import { readMd, removeMd, saveMD } from './files';
 
 import {
@@ -64,7 +63,7 @@ export const selectInit = () => {
   setDataLists();
 };
 
-on(EVENT.SAVE, async ({ matter, contents }) => {
+on(EVENT.SAVE, async ({ matter }) => {
   matter.updated = today;
   setMdType(isPost, true, isNew);
   if (isPost) {
@@ -78,7 +77,7 @@ on(EVENT.SAVE, async ({ matter, contents }) => {
     matter.layout = 'page';
     if (!fileName) setFileName(uniqueFileName(slugify(matter.title)));
   }
-  await replaceImages();
+  const contents = await replaceImages();
   await saveMD(matter, contents);
   await addDraftInfo({ title: matter.title, date: today });
   acceptChanges();

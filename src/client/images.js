@@ -1,15 +1,7 @@
 import { join } from './utils';
-import { HEXO_IMG_DIR, EDITOR_IMG_DIR, DOCUMENT_ROOT, IMG_DIR } from './data';
-import { getEditorImages } from './editor';
-
-// const fs = Neutralino.filesystem;
+import { getEditorImages, getEditorContents } from './editor';
 
 const canvas = document.getElementById('canvas');
-
-const getBlob = (canvas) =>
-  new Promise((resolve) => {
-    canvas.toBlob((blob) => resolve(blob));
-  });
 
 export const replaceImages = async () => {
   const ctx = canvas.getContext('2d');
@@ -23,12 +15,17 @@ export const replaceImages = async () => {
     canvas.width = w;
     canvas.height = h;
     ctx.drawImage(imgEl, 0, 0, w, h);
-    const imgFileName = join(EDITOR_IMG_DIR, img.name);
-    const blob = await getBlob(canvas);
-    const buffer = await blob.arrayBuffer();
-    // await fs.writeBinaryFile(imgFileName, buffer);
-    imgEl.src = join(IMG_DIR, img.name);
-    imgEl.setAttribute('origin-size', `${w},${h}`);
+    const response = await fetch(join('/images', img.name), {
+      method: 'POST',
+      body: canvas.toDataURL(),
+    });
+    if (response.ok) {
+      imgEl.src = join('/images', await response.text());
+      imgEl.setAttribute('origin-size', `${w},${h}`);
+      console.log(imgEl.outerHTML);
+    } else {
+      console.error('response not ok');
+    }
   }
-  await addImagesToGallery(images.map((img) => img.name));
+  return getEditorContents();
 };
