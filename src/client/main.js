@@ -1,10 +1,10 @@
-import { onClick } from './utils';
+import { onClick, join } from './utils';
 
 import { loadInfo } from './data';
 
 import { EVENT, dispatch } from './events';
 import { editMenu } from './menu';
-// import './hexo';
+import './hexo';
 import { selectInit, clearSelect } from './select';
 import { ROUTES } from '../common';
 

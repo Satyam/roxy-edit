@@ -1,5 +1,7 @@
 import { onClick, join } from './utils';
 
+import { ROUTES } from '../common';
+
 const terminal = document.getElementById('terminal');
 const hexoButtons = document.getElementById('hexoButtons');
 
@@ -10,10 +12,10 @@ const clearTerminal = () => {
 const escRx = /\x1b\[\d+m/gm;
 const progressRx = /--\s*.+\sTamaño:\s*\d+\s*Total:\s*\d+\s*--/m;
 const preRx = /<pre>.*<\/pre>/gms;
-const doneRx = /--\s*DONE\s*--/im;
 const emptyInfo = /info\s*$/im;
 
 const appendTerminal = (contents) => {
+  console.log('appendTerminal', contents);
   if (emptyInfo.test(contents)) return;
   if (progressRx.test(contents)) {
     const log = terminal.innerHTML;
@@ -37,39 +39,25 @@ const appendTerminal = (contents) => {
 };
 
 const launch = async (command) => {
-  const process = await Neutralino.os.spawnProcess(
-    `node ${join(NL_PATH, 'extensions/hexo.js')} ${command}`
-  );
-
-  await new Promise((resolve, reject) => {
-    const handler = (ev) => {
-      const { id, data, action } = ev.detail;
-      if (process.id == id) {
-        switch (action) {
-          case 'stdOut':
-            if (doneRx.test(data)) {
-              Neutralino.events.off('spawnedProcess', handler);
-              resolve();
-            } else {
-              appendTerminal(data);
-            }
-            break;
-          case 'stdErr':
-            appendTerminal(data);
-            reject();
-            break;
-          case 'exit':
-            appendTerminal(
-              `<hr/>El processo terminó con ${data ? `error ${data}` : `éxito`}`
-            );
-            Neutralino.events.off('spawnedProcess', handler);
-            resolve();
-            break;
-        }
-      }
-    };
-    Neutralino.events.on('spawnedProcess', handler);
-  });
+  console.log('launch', command);
+  for (;;) {
+    const response = await fetch(join(ROUTES.HEXO, command));
+    console.log('loop', response.status);
+    command = '';
+    switch (response.status) {
+      case 200:
+        appendTerminal(await response.text());
+        break;
+      case 201:
+        appendTerminal(await response.text());
+        return;
+      case 502:
+        break;
+      default:
+        appendTerminal(`Error [${response.status}]: ${response.statusText}`);
+        return;
+    }
+  }
 };
 
 const anyClick = async () =>

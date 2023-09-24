@@ -4,6 +4,8 @@ export const ROUTES = {
   MENU: '/menu',
   INFO: '/info',
   EXIT: '/exit',
+  HEXO: '/hexo',
+  ROXY: '/roxanacabut',
 };
 
 export const PORT = 3000;

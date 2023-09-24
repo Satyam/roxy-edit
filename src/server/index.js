@@ -1,11 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import open from 'open';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'url';
 
 import imgRouter from './images.js';
 import menuRouter from './menu.js';
 import filesRouter from './files.js';
+import hexoRouter from './hexo.js';
 import { CWD, infoRouter } from './data.js';
 import { ROUTES, PORT } from '../common.js';
 
@@ -22,6 +24,7 @@ app.use(ROUTES.IMAGES, imgRouter);
 app.use(ROUTES.FILES, filesRouter);
 app.use(ROUTES.INFO, infoRouter);
 app.use(ROUTES.MENU, menuRouter);
+app.use(ROUTES.HEXO, hexoRouter);
 
 app.get('/favicon.ico', (_, res) => {
   res.sendFile(join(CWD, 'public/icons/appIcon.png'));
