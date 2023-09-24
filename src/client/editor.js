@@ -2,7 +2,8 @@ import suneditor from 'suneditor';
 import plugins from 'suneditor/src/plugins';
 import es from 'suneditor/src/lang/es';
 import { dispatch, EVENT } from './events';
-
+import { ROUTES } from '../common';
+import { join } from './utils';
 import { plugin_dialog } from './linkDialog';
 
 const editor = suneditor.create('suneditor', {
@@ -17,7 +18,7 @@ const editor = suneditor.create('suneditor', {
   mode: 'classic',
   rtl: false,
   // katex: 'window.katex',
-  imageGalleryUrl: '/images/gallery',
+  imageGalleryUrl: join(ROUTES.IMAGES, '/gallery'),
   videoFileInput: false,
   tabDisable: false,
   buttonList: [

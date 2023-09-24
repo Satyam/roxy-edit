@@ -1,6 +1,6 @@
 import { join } from './utils';
 import { getEditorImages, getEditorContents } from './editor';
-
+import { ROUTES } from '../common';
 const canvas = document.getElementById('canvas');
 
 export const replaceImages = async () => {
@@ -15,12 +15,12 @@ export const replaceImages = async () => {
     canvas.width = w;
     canvas.height = h;
     ctx.drawImage(imgEl, 0, 0, w, h);
-    const response = await fetch(join('/images', img.name), {
+    const response = await fetch(join(ROUTES.IMAGES, img.name), {
       method: 'POST',
       body: canvas.toDataURL(),
     });
     if (response.ok) {
-      imgEl.src = join('/images', await response.text());
+      imgEl.src = join(ROUTES.IMAGES, await response.text());
       imgEl.setAttribute('origin-size', `${w},${h}`);
       console.log(imgEl.outerHTML);
     } else {

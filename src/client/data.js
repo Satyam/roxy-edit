@@ -12,7 +12,7 @@ export const HEXO_IMG_DIR = join(SRC_PAGES_DIR, IMG_DIR);
 export const EDITOR_IMG_DIR = join(DOCUMENT_ROOT, IMG_DIR);
 export const MENU_CONFIG = join(HEXO_DIR, '_config.roxy.yml');
 
-const INFO_JSON = join('/info');
+import { ROUTES } from '../common';
 
 let info;
 
@@ -24,7 +24,7 @@ export const getPosts = () => info.posts;
 export const getDrafts = (post = false) =>
   info.drafts.filter((p) => p.isPost === post);
 
-export const saveInfo = () => sendJson(INFO_JSON, info);
+export const saveInfo = () => sendJson(ROUTES.INFO, info);
 
 export const removeDraftInfo = async () => {
   info.drafts = info.drafts.filter(
@@ -133,7 +133,7 @@ export const loadInfo = async () => {
       authors: [],
       drafts: [],
     },
-    await fetchJson(INFO_JSON)
+    await fetchJson(ROUTES.INFO)
   );
   ['categories', 'tags', 'authors'].forEach((sel) => {
     info[sel].sort();

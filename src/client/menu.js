@@ -5,8 +5,10 @@ import { onClick, md2rootHtml } from './utils';
 
 import { getPages } from './data';
 import { fetchJson, sendJson } from './fetch';
+import { ROUTES } from '../common';
 
 let pages = [];
+
 const currentMenu = document.getElementById('currentMenu');
 const morePages = document.getElementById('morePages');
 const menuEditor = document.getElementById('menuEditor');
@@ -53,7 +55,7 @@ const renderMenuObj = (menu) =>
 export const editMenu = async () => {
   pages = Array.from(getPages());
 
-  const menu = await fetchJson('/menu');
+  const menu = await fetchJson(ROUTES.MENU);
 
   currentMenu.innerHTML = renderMenuObj(menu);
   const h = pages.find((p) => p.file === 'index.md');
@@ -135,7 +137,7 @@ onClick(saveMenu, async () => {
     return subMenu;
   };
   enableSaveMenu(false);
-  await sendJson('/menu', parseUl(currentMenu));
+  await sendJson(ROUTES.MENU, parseUl(currentMenu));
 });
 
 currentMenu.addEventListener('input', (ev) => {

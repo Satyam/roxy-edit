@@ -6,6 +6,7 @@ import { EVENT, dispatch } from './events';
 import { editMenu } from './menu';
 // import './hexo';
 import { selectInit, clearSelect } from './select';
+import { ROUTES } from '../common';
 
 const CNAMES = {
   MENU: 'menu',
@@ -15,7 +16,7 @@ const CNAMES = {
 const main = document.getElementById('main');
 
 const exit = async (err) => {
-  await fetch(`/exit/${err}`);
+  await fetch(join(ROUTES.EXIT, Number(err)));
   window.close();
 };
 

@@ -2,8 +2,9 @@ import { join } from './utils';
 import { parse, stringify } from './frontmatter';
 import { isPost, isDraft, fileName } from './state';
 import { deleteFile, fetchText, sendText } from './fetch';
-
-const url = (draft) => join('/files', !!(draft ?? isDraft), !!isPost, fileName);
+import { ROUTES } from '../common';
+const url = (draft) =>
+  join(ROUTES.FILES, !!(draft ?? isDraft), !!isPost, fileName);
 
 export const readMd = async () => parse(await fetchText(url()));
 
