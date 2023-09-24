@@ -24,6 +24,6 @@ export default [
       include: ['src/server/**', 'src/common/**'],
     },
     plugins: [nodeResolve(), commonjs(), json()],
-    // external: [/node_modules/],
+    external: [/node_modules/],
   },
 ];
