@@ -38,6 +38,7 @@ const setFakeConsole = (hexo) => {
 const commands = {
   generate: (hexo) => hexo.call('generate', {}),
   viewLocal: (hexo) => open(`http://localhost:${PORT}${ROUTES.ROXY}`),
+  viewRemote: (hexo) => open('http://roxanacabut.com'),
   upload: (hexo) => hexo.call('deploy', { generate: true }),
 };
 
