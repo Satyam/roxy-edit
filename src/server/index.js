@@ -1,8 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import open from 'open';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'url';
+import { join } from 'node:path';
 
 import imgRouter from './images.js';
 import menuRouter from './menu.js';
