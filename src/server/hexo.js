@@ -12,7 +12,6 @@ const terminal = [];
 let done = false;
 
 const send = (msg, event = 'LOG') => {
-  console.log(`${event}: ${msg}`);
   terminal.push(`${event}: ${msg}`);
 };
 
@@ -44,20 +43,18 @@ const commands = {
 
 hexoRouter.get('/', (_, res) => {
   const poll = () => {
-    console.log('polled', done, terminal.length, terminal.join('\n'));
     if (done) {
+      res.status(201).send(terminal.join('\n'));
+      terminal.length = 0;
+    } else {
       if (terminal.length) {
         res.send(terminal.join('\n'));
         terminal.length = 0;
       } else {
         setTimeout(poll, 1000);
       }
-    } else {
-      res.status(201).send(terminal.join('\n'));
-      terminal.length = 0;
     }
   };
-  console.log('get', done, terminal.length, terminal.join('\n'));
   poll();
 });
 
