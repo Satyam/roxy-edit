@@ -5,6 +5,7 @@ export const ROUTES = {
   INFO: '/info',
   EXIT: '/exit',
   HEXO: '/hexo',
+  VIEW: '/view',
   ROXY: '/roxanacabut',
 };
 

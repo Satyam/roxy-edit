@@ -15,7 +15,6 @@ const preRx = /<pre>.*<\/pre>/gms;
 const emptyInfo = /info\s*$/im;
 
 const appendTerminal = (contents) => {
-  console.log('appendTerminal', contents);
   if (emptyInfo.test(contents)) return;
   if (progressRx.test(contents)) {
     const log = terminal.innerHTML;
@@ -89,3 +88,7 @@ onClick(
   },
   'button'
 );
+
+onClick('#viewButtons', async (btn) => {
+  await fetch(join(ROUTES.VIEW, btn.name));
+});

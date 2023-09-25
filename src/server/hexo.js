@@ -3,7 +3,7 @@ import Hexo from 'hexo';
 import open from 'open';
 
 import { HEXO_DIR } from './data';
-import { ROUTES } from '../common';
+import { ROUTES, PORT } from '../common';
 
 export const hexoRouter = new express.Router();
 export default hexoRouter;
@@ -29,17 +29,9 @@ function replaceStr(string, ...placeholders) {
 }
 
 const setFakeConsole = (hexo) => {
-  console.log('setting fake console');
   ['trace', 'info', 'warn', 'error', 'fatal' /*,'log'*/].forEach((type) => {
     hexo.log[type] = (...args) => send(replaceStr(...args), type.toUpperCase());
   });
-};
-
-const commands = {
-  generate: (hexo) => hexo.call('generate', {}),
-  viewLocal: (hexo) => open(`http://localhost:${PORT}${ROUTES.ROXY}`),
-  viewRemote: (hexo) => open('http://roxanacabut.com'),
-  upload: (hexo) => hexo.call('deploy', { generate: true }),
 };
 
 hexoRouter.get('/', (_, res) => {
@@ -58,6 +50,11 @@ hexoRouter.get('/', (_, res) => {
   };
   poll();
 });
+
+const commands = {
+  generate: (hexo) => hexo.call('generate', {}),
+  upload: (hexo) => hexo.call('deploy', { generate: true }),
+};
 
 hexoRouter.get('/:command', async (req, res) => {
   const command = commands[req.params.command];
