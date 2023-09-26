@@ -19,6 +19,9 @@ const exit = async (err) => {
   await fetch(join(ROUTES.EXIT, Number(err)));
   window.close();
 };
+window.addEventListener('beforeunload', () => {
+  exit();
+});
 
 loadInfo()
   .then(async () => {
