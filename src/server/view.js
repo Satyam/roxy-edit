@@ -1,5 +1,5 @@
 import express from 'express';
-import open, { apps } from 'open';
+import open from 'open';
 
 import { ROUTES, PORT } from '../common';
 

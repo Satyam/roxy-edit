@@ -1,9 +1,7 @@
 import express from 'express';
 import Hexo from 'hexo';
-import open from 'open';
 
 import { HEXO_DIR } from './data';
-import { ROUTES, PORT } from '../common';
 
 export const hexoRouter = new express.Router();
 export default hexoRouter;
