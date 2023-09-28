@@ -5,9 +5,14 @@ const valregex = /\{\{([=%])(.+?)\}\}/g;
 const scrub = (val) => new Option(val).innerHTML.replace(/"/g, '&quot;');
 
 const get_value = (vars, key) =>
-  key.split('.').reduce((out, part) => out[part] ?? false, vars);
+  key
+    .split('.')
+    .reduce(
+      (out, part) => (out instanceof Map ? out.get(part) : out[part]) ?? false,
+      vars
+    );
 
-export default function render(fragment, vars) {
+export const renderString = (fragment, vars) => {
   return fragment
     .replace(
       blockregex,
@@ -16,11 +21,11 @@ export default function render(fragment, vars) {
         if (!val) {
           // handle if not
           if (meta === '!') {
-            return render(inner, vars);
+            return renderString(inner, vars);
           }
           // check for else
           if (has_else) {
-            return render(if_false, vars);
+            return renderString(if_false, vars);
           }
 
           return '';
@@ -28,14 +33,21 @@ export default function render(fragment, vars) {
 
         // regular if
         if (!meta) {
-          return render(if_true, vars);
+          return renderString(if_true, vars);
         }
 
         // process array/obj iteration
         if (meta === '@') {
-          return Object.keys(val).reduce(
+          return (
+            val instanceof Map ? [...val.keys()] : Object.keys(val)
+          ).reduce(
             (out, _key) =>
-              out + render(inner, { ...vars, _key, _val: val[_key] }),
+              out +
+              renderString(inner, {
+                ...vars,
+                _key,
+                _val: val instanceof Map ? val.get(_key) : val[_key],
+              }),
             ''
           );
         }
@@ -49,4 +61,7 @@ export default function render(fragment, vars) {
       }
       return '';
     });
-}
+};
+
+export const renderTpl = (id, vars) =>
+  renderString(document.getElementById(id).innerHTML, vars);
