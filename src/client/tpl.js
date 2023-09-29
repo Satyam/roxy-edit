@@ -1,6 +1,6 @@
 const blockregex =
   /\{\{(([@!]?)([\.\w]+)[\s\S]*?)\}\}(([\s\S]+?)(\{\{:\1\}\}([\s\S]+?))?)\{\{\/\1\}\}/g;
-const valregex = /\{\{([=%])(.+?)\}\}/g;
+const valregex = /\{\{([=%#])(.+?)\}\}/g;
 
 const scrub = (val) => new Option(val).innerHTML.replace(/"/g, '&quot;');
 
@@ -12,7 +12,7 @@ const get_value = (vars, key) =>
       vars
     );
 
-export const renderString = (fragment, vars) => {
+export const renderString = (fragment, vars, formatters = {}) => {
   return fragment
     .replace(
       blockregex,
@@ -21,11 +21,11 @@ export const renderString = (fragment, vars) => {
         if (!val) {
           // handle if not
           if (meta === '!') {
-            return renderString(inner, vars);
+            return renderString(inner, vars, formatters);
           }
           // check for else
           if (has_else) {
-            return renderString(if_false, vars);
+            return renderString(if_false, vars, formatters);
           }
 
           return '';
@@ -33,7 +33,7 @@ export const renderString = (fragment, vars) => {
 
         // regular if
         if (!meta) {
-          return renderString(if_true, vars);
+          return renderString(if_true, vars, formatters);
         }
 
         // process array/obj iteration
@@ -42,11 +42,15 @@ export const renderString = (fragment, vars) => {
           const out = [];
           for (const [_key, _val] of val.entries()) {
             out.push(
-              renderString(inner, {
-                ...vars,
-                _key,
-                _val,
-              })
+              renderString(
+                inner,
+                {
+                  ...vars,
+                  _key,
+                  _val,
+                },
+                formatters
+              )
             );
           }
           return out.join('');
@@ -54,6 +58,16 @@ export const renderString = (fragment, vars) => {
       }
     )
     .replace(valregex, (_, meta, key) => {
+      if (meta == '#') {
+        const [_key, fns] = key.split('|');
+        return fns
+          .split(',')
+          .reduce(
+            (val, fn) =>
+              typeof formatters[fn] == 'function' ? formatters[fn](val) : val,
+            get_value(vars, _key)
+          );
+      }
       const val = get_value(vars, key);
 
       if (val || val === 0) {
@@ -63,5 +77,5 @@ export const renderString = (fragment, vars) => {
     });
 };
 
-export const renderTpl = (id, vars) =>
-  renderString(document.getElementById(id).innerHTML, vars);
+export const renderTpl = (id, vars, formatters) =>
+  renderString(document.getElementById(id).innerHTML, vars, formatters);
