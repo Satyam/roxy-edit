@@ -241,6 +241,52 @@
       <button class="default" value="true">Aceptar</button>
       <button value="false">Cancelar</button>
     </dialog>
+    <!-- prettier-ignore -->
+    <template id="tplPagesList">
+      <p>
+        <span class="icon-left home"></span>
+        <a href="{{=home.file}}">{{=home.title}}</a>
+      </p>
+      <ul>
+        {{@pages}} 
+          {{_val.borrador}}
+            <li class="can-t-edit" title="Está en Borradores">{{=_val.title}}</li>
+          {{:_val.borrador}}
+            <li><a href="{{=_val.file}}">{{=_val.title}}</a></li>
+          {{/_val.borrador}} 
+        {{/@pages}}
+      </ul>
+    </template>
+    <!-- prettier-ignore -->
+    <template id="tplPostsList">
+      {{@tree}}
+      <details>
+        <summary>{{=_key}}</summary>
+        {{@_val year}}
+        <details>
+          <summary>{{=_key}}</summary>
+          {{@_val month}}
+          <details>
+            <summary>{{=_key}}</summary>
+            <p>{{#_val.0.date|dateFormatter}}</p>
+            <ul>
+              {{@_val day}} 
+                {{_val.borrador}}
+                  <li class="can-t-edit" title="Está en Borradores">
+                    {{_val.title}}
+                  </li>
+                {{:_val.borrador}}
+                  <li><a href="{{=_val.file}}">{{=_val.title}}</a></li>
+                {{/_val.borrador}} 
+              {{/@_val day}}
+            </ul>
+          </details>
+          {{/@_val month}}
+        </details>
+        {{/@_val year}}
+      </details>
+      {{/@tree}}
+    </template>
     <script src="node_modules/sortablejs/Sortable.min.js"></script>
     <script src="main.js"></script>
   </body>

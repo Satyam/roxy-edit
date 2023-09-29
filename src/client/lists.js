@@ -1,54 +1,57 @@
 import { getPages, getPosts, getDrafts } from './data';
 import { objMapString, sortDescending } from './utils';
+import { renderTpl } from './tpl';
 
 export const pagesList = () => {
   const drafts = getDrafts();
   const [home, ...pages] = getPages();
-
-  return `<p><span class="icon-left home"></span>
-      <a href="${home.file}">${home.title}</a>
-    </p>
-    <ul>${pages
-      .map((p) =>
-        drafts.some((d) => d.file === p.file)
-          ? `<li class="can-t-edit" title="Está en Borradores">${p.title}</li>`
-          : `<li><a href="${p.file}">${p.title}</a></li>`
-      )
-      .join('')}</ul>`;
+  const p = pages
+    .toSorted((a, b) => {
+      if (a.title > b.title) return 1;
+      if (a.title < b.title) return -1;
+      return 0;
+    })
+    .map((p) => ({
+      ...p,
+      borrador: drafts.some((d) => d.file === p.file),
+    }));
+  return renderTpl('tplPagesList', { home, pages: p });
 };
 
 export const postsList = () => {
   const drafts = getDrafts(true);
 
-  const tree = {};
-  getPosts().forEach((p) => {
-    const [y, m, d] = p.date.split('-');
-    if (!(y in tree)) tree[y] = {};
-    if (!(m in tree[y])) tree[y][m] = {};
-    if (!(d in tree[y][m])) tree[y][m][d] = [];
-    tree[y][m][d].push(p);
-  });
-  return objMapString(
-    tree,
-    (y) =>
-      `<details><summary>${y}</summary>${objMapString(
-        tree[y],
-        (m) =>
-          `<details><summary>${m}</summary>${objMapString(
-            tree[y][m],
-            (d) =>
-              `<details><summary>${d}</summary><p>${d}/${m}/${y}</p><ul>
-              ${tree[y][m][d]
-                .map((p) =>
-                  drafts.some((d) => d.file === p.file)
-                    ? `<li class="can-t-edit" title="Está en Borradores">${p.title}</li>`
-                    : `<li><a href="${p.file}">${p.title}</a></li>`
-                )
-                .join('\n')}</ul></details>`,
-            sortDescending
-          )}</details>`,
-        sortDescending
-      )}</details>`,
-    sortDescending
+  const tree = new Map();
+  let ptr;
+  getPosts()
+    .toSorted((a, b) => {
+      if (a.date > b.date) return -1;
+      if (a.date < b.date) return 1;
+      return 0;
+    })
+    .forEach((p) => {
+      const [y, m, d] = p.date.split('-');
+      if (tree.has(y)) {
+        ptr = tree.get(y);
+      } else {
+        tree.set(y, (ptr = new Map()));
+      }
+      if (ptr.has(m)) {
+        ptr = ptr.get(m);
+      } else {
+        ptr.set(m, (ptr = new Map()));
+      }
+      if (ptr.has(d)) {
+        ptr = ptr.get(d);
+      } else {
+        ptr.set(d, (ptr = []));
+      }
+      p.borrador = drafts.some((d) => d.file === p.file);
+      ptr.push(p);
+    });
+  return renderTpl(
+    'tplPostsList',
+    { tree, drafts },
+    { dateFormatter: (date) => date.replace(/(\d+)-(\d+)-(\d+)/, '$3/$2/$1') }
   );
 };
