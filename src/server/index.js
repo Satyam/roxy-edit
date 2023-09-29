@@ -28,14 +28,12 @@ app.use(ROUTES.MENU, menuRouter);
 app.use(ROUTES.HEXO, hexoRouter);
 app.use(ROUTES.VIEW, viewRouter);
 
-app.get;
-
 app.get('/favicon.ico', (_, res) => {
   res.sendFile(join(CWD, 'public/icons/appIcon.png'));
 });
+
 app.get(join(ROUTES.EXIT, '/:code?'), (req, res) => {
   res.end('gone');
-  console.log('The End');
   process.exit(req.params.code ?? 0);
 });
 
