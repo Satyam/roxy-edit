@@ -1,0 +1,16 @@
+<!-- prettier-ignore -->
+<template id="tplPagesList">
+  <p>
+    <span class="icon-left home"></span>
+    <a href="{{=home.file}}">{{=home.title}}</a>
+  </p>
+  <ul>
+    {{@pages}} 
+      {{_val.borrador}}
+        <li class="can-t-edit" title="Está en Borradores">{{=_val.title}}</li>
+      {{:_val.borrador}}
+        <li><a href="{{=_val.file}}">{{=_val.title}}</a></li>
+      {{/_val.borrador}} 
+    {{/@pages}}
+  </ul>
+</template>

@@ -1,0 +1,135 @@
+<section id="editor">
+  <form id="form" novalidate>
+    <div>
+      <label
+        >Título
+        <input
+          name="title"
+          class="text-input wide"
+          title="Título de la página o post"
+          tabindex="1"
+        />
+        <div class="error"></div>
+      </label>
+      <label
+        >Fecha<input
+          name="date"
+          type="date"
+          class="text-input"
+          title="Fecha de publicación"
+        />
+        <div class="error"></div>
+      </label>
+      <div id="postExtra">
+        <fieldset
+          class="two-halves"
+          title="Ingresa una nueva categoría y/o haz clic en cualquiera de las listas para moverlas de lado a lado"
+        >
+          <legend>Categorias</legend>
+          <div>
+            <input
+              name="newCat"
+              title="Puedes ingresar una nueva categoría aquí"
+            /><br />
+            <ul
+              id="catList"
+              class="selection"
+              title="Puedes hacer clic en una o más de las categorías existentes para seleccionarla"
+            ></ul>
+          </div>
+          <fieldset>
+            <legend>Seleccionadas:</legend>
+            <ul
+              id="selectedCats"
+              class="selectedItems"
+              title="Puedes hacer clic en alguna de las catetorías seleccionadas para elminarla"
+            ></ul>
+          </fieldset>
+        </fieldset>
+        <fieldset
+          class="two-halves"
+          title="Ingresa una nueva etiqueta y/o haz clic en alguna de las etiquetas para moverlas de lado a lado"
+        >
+          <legend>Etiquetas</legend>
+          <div>
+            <input
+              name="newTag"
+              title="Puedes ingresar una nueva etiqueta aquí"
+            /><br />
+            <ul
+              id="tagsList"
+              class="selection"
+              title="Puedes clicar en las etiquetas para agregarlas"
+            ></ul>
+          </div>
+          <fieldset>
+            <legend>Seleccionadas:</legend>
+            <ul
+              id="selectedTags"
+              class="selectedItems"
+              title="Puedes clicar en las etiquetas para eliminarlas"
+            ></ul>
+          </fieldset>
+        </fieldset>
+        <label
+          >Autor<input
+            name="author"
+            class="text-input wide"
+            title="Ingresa o selecciona el nombre del autor"
+            list="authorDatalist"
+          />
+          <div class="error"></div>
+        </label>
+        <datalist id="authorDatalist"></datalist>
+      </div>
+    </div>
+    <div>
+      <fieldset>
+        <legend>Original</legend>
+        <button
+          name="publish"
+          type="submit"
+          title="Guarda este borrador como original para publicar"
+        >
+          <span class="icon-left save"></span>
+          Guardar
+        </button>
+        <button
+          name="remove"
+          type="submit"
+          class="warning"
+          title="Borra este borrador y el original"
+        >
+          <span class="icon-left delete"></span>
+          Borrar
+        </button>
+      </fieldset>
+      <fieldset>
+        <legend>Borrador</legend>
+        <button
+          name="save"
+          type="submit"
+          title="Guarda el borrador sin afectar el original"
+        >
+          <span class="icon-left save"></span>
+          Guardar
+        </button>
+        <button
+          name="discard"
+          type="submit"
+          class="warning"
+          title="Descarta este borrador sin afectar el original"
+        >
+          <span class="icon-left delete"></span>
+          Descartar
+        </button>
+      </fieldset>
+      <button type="reset" title="Vuelve a la selección de archivos">
+        <span class="icon-left back"></span>
+        Volver
+      </button>
+    </div>
+  </form>
+
+  <textarea id="suneditor"></textarea>
+</section>

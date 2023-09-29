@@ -1,0 +1,30 @@
+<!-- prettier-ignore -->
+<template id="tplPostsList">
+  {{@tree}}
+  <details>
+    <summary>{{=_key}}</summary>
+    {{@_val year}}
+    <details>
+      <summary>{{=_key}}</summary>
+      {{@_val month}}
+      <details>
+        <summary>{{=_key}}</summary>
+        <p>{{#_val.0.date|dateFormatter}}</p>
+        <ul>
+          {{@_val day}} 
+            {{_val.borrador}}
+              <li class="can-t-edit" title="Está en Borradores">
+                {{_val.title}}
+              </li>
+            {{:_val.borrador}}
+              <li><a href="{{=_val.file}}">{{=_val.title}}</a></li>
+            {{/_val.borrador}} 
+          {{/@_val day}}
+        </ul>
+      </details>
+      {{/@_val month}}
+    </details>
+    {{/@_val year}}
+  </details>
+  {{/@tree}}
+</template>
