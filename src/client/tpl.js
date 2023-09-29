@@ -37,19 +37,19 @@ export const renderString = (fragment, vars) => {
         }
 
         // process array/obj iteration
+        // TODO do separate loops for regular objects and maps.
         if (meta === '@') {
-          return (
-            val instanceof Map ? [...val.keys()] : Object.keys(val)
-          ).reduce(
-            (out, _key) =>
-              out +
+          const out = [];
+          for (const [_key, _val] of val.entries()) {
+            out.push(
               renderString(inner, {
                 ...vars,
                 _key,
-                _val: val instanceof Map ? val.get(_key) : val[_key],
-              }),
-            ''
-          );
+                _val,
+              })
+            );
+          }
+          return out.join('');
         }
       }
     )
