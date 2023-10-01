@@ -1,3 +1,4 @@
+import { renderTpl } from './tpl';
 import { today, onClick } from './utils';
 
 import { getCategories, getTags, getAuthors } from './data';
@@ -34,36 +35,24 @@ let originalValues = structuredClone(defaultValues);
 let categories = [];
 let tags = [];
 
-const fillDataList = (input, list) => {
-  input.list.innerHTML = list
-    .map((name) => `<option value="${name}" />`)
-    .join('\n');
-};
-
-const li = (value, extra = '') => `<li ${extra}>${value}</li>`;
-
 const refreshCats = () => {
-  const list = [];
-  const newVal = els.newCat.value;
-  const sel = newVal.length ? [li(newVal, 'data-is-new')] : [];
-  getCategories().forEach((cat) => {
-    if (categories.includes(cat)) sel.push(li(cat));
-    else list.push(li(cat));
+  catList.innerHTML = renderTpl('tplLiItems', {
+    list: getCategories().filter((cat) => !categories.includes(cat)),
   });
-  catList.innerHTML = list.join('\n');
-  selectedCats.innerHTML = sel.join('\n');
+  selectedCats.innerHTML = renderTpl('tplLiItems', {
+    newVal: els.newCat.value,
+    list: categories,
+  });
 };
 
 const refreshTags = () => {
-  const list = [];
-  const newVal = els.newTag.value;
-  const sel = newVal.length ? [li(newVal, 'data-is-new')] : [];
-  getTags().forEach((tag) => {
-    if (tags.includes(tag)) sel.push(li(tag));
-    else list.push(li(tag));
+  tagsList.innerHTML = renderTpl('tplLiItems', {
+    list: getTags().filter((tag) => !tags.includes(tag)),
   });
-  tagsList.innerHTML = list.join('\n');
-  selectedTags.innerHTML = sel.join('\n');
+  selectedTags.innerHTML = renderTpl('tplLiItems', {
+    newVal: els.newTag.value,
+    list: tags,
+  });
 };
 
 const refreshLists = () => {
@@ -75,7 +64,7 @@ export const setDataLists = () => {
   els.newTag.value = '';
   refreshLists();
 
-  fillDataList(els.author, getAuthors());
+  els.author.list.innerHTML = renderTpl('tplFillDataList', getAuthors());
 };
 
 const showError = (el, msg) => {

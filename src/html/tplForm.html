@@ -1,0 +1,14 @@
+<template id="tplFillDataList">
+  {{@list}} 
+    <option value="{{=_val}}" /> 
+  {{/@list}}
+</template>
+
+<template id="tplLiItems">
+  {{newVal}}
+    <li data-is-new>{{=newVal}}</li>
+  {{/newVal}}
+  {{@list}}
+    <li>{{=_val}}</li>
+  {{/@list}}
+</template>
