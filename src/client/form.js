@@ -55,14 +55,11 @@ const refreshTags = () => {
   });
 };
 
-const refreshLists = () => {
-  refreshCats();
-  refreshTags();
-};
 export const setDataLists = () => {
   els.newCat.value = '';
   els.newTag.value = '';
-  refreshLists();
+  refreshCats();
+  refreshTags();
 
   els.author.list.innerHTML = renderTpl('tplFillDataList', getAuthors());
 };

@@ -1,5 +1,4 @@
 import { getPages, getPosts, getDrafts } from './data';
-import { objMapString, sortDescending } from './utils';
 import { renderTpl } from './tpl';
 
 export const pagesList = () => {
