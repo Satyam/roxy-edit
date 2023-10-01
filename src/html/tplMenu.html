@@ -1,0 +1,75 @@
+<!--
+{
+  "Mis propuestas": {
+    "Sesiones Individuales": "/acompanamiento-creativo.html",
+    "Sesiones Grupales: \"Escuchándonos\"": "/talleres-sobre-comunicacion.html",
+    "Talleres de Movimiento Expresivo": "/talleres-de-movimiento.html",
+    "Sesiones de Masaje": "/sesiones-individuales-de-masaje.html"
+  },
+  "Libro: \"la corazón\"": "/libro-la-corazon.html",
+  "Agenda": "/agenda.html",
+  "Más información": {
+    "Trayectoria": "/mas-informacion.html",
+    "Movimiento y conciencia corporal": "/copia-de-conciencia-corporal.html",
+    "Sistema Río Abierto": "/sistema-rio-abierto.html"
+  },
+  "Escritos": {
+    "Recordar quiénes somos": "/recordar-quienes-somos.html",
+    "nueva página": "/nueva-pagina.html",
+    "Había una vez ...": "/habia-una-vez.html",
+    "Pensar y sentir": "/pensar-y-sentir.html",
+    "Conciencia": "/conciencia.html"
+  },
+  "Contacto": "/contacto.html"
+}
+-->
+
+<template id="tplHomePage">
+  <li title="{{#h.file|md2rootHtml}}">
+    <span class="icon-left home"></span>
+    <span class="icon-left document"></span>
+    {{=h.title}}
+  </li>
+</template>
+<template id="tplMorePages">
+  {{@pages}}
+    <li title="{{#_val|md2rootHtml}}">
+      <span class="icon-left updown"></span>
+      <span class="icon-left document"></span>
+      <span class="title" contentEditable>{{=_val.title}}</span>
+    </li>
+  {{/@pages}}
+</template>
+<template id="tplLeafItem">
+  <li title="{{=value}}">
+    <span class="icon-left updown"></span>
+    <span class="icon-left document"></span>
+    <span class="title" contentEditable >{{=label}}</span>
+  </li>
+</template>
+<template id="tplMainItem">
+  <li>
+    <span class="icon-left updown"></span>
+    <span class="icon-left folder"></span>
+    <span class="title" contentEditable>{{=label}}</span>
+      <ul class="draggable">{{#value|renderMenuObj}}</ul>
+    </li>
+</template>
+<template id="tplNewFolder">
+  <li>
+    <span class="icon-left updown"></span>
+    <span class="icon-left new-folder"></span>
+    Nueva carpeta
+  </li>
+</template>
+<template id="tplNewEmptyFolder">
+  <span class="icon-left updown"></span>
+  <span class="icon-left folder"></span>
+  <span class="title" contentEditable>--- editar ---</span>
+  <ul class="draggable">
+    <li class="empty">--vacía--</li>
+  </ul>  
+</template>
+<template id="tplEmptyFolder">
+  <li class="empty">--vacía--</li>
+</template>

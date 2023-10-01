@@ -2,7 +2,7 @@ import { onClick, md2rootHtml } from './utils';
 // For some reason it works when imported via <script> but dies if imported
 // and rolled up.
 // import Sortable from 'sortablejs';
-
+import { renderTpl } from './tpl';
 import { getPages } from './data';
 import { fetchJson, sendJson } from './fetch';
 import { ROUTES } from '../common';
@@ -36,18 +36,9 @@ const renderMenuObj = (menu) =>
             return true;
           }
         });
-        return `<li title="${value}">
-          <span class="icon-left updown"></span>
-          <span class="icon-left document"></span>
-          <span class="title" contentEditable >${label}</span>
-        </li>`;
+        return renderTpl('tplLeafItem', { label, value });
       } else {
-        return `<li>
-          <span class="icon-left updown"></span>
-          <span class="icon-left folder"></span>
-          <span class="title" contentEditable>${label}</span>
-            <ul class="draggable">${renderMenuObj(menu[label])}</ul>
-          </li>`;
+        return renderTpl('tplMainItem', { label, value }, { renderMenuObj });
       }
     })
     .join('\n');
@@ -60,21 +51,10 @@ export const editMenu = async () => {
   currentMenu.innerHTML = renderMenuObj(menu);
   const h = pages.find((p) => p.file === 'index.md');
   h.used = true;
-  homePage.innerHTML = `<li title="${md2rootHtml(h.file)}">
-    <span class="icon-left home"></span>
-    <span class="icon-left document"></span>
-    ${h.title}
-  </li>`;
-  morePages.innerHTML = pages
-    .filter((p) => !p.used)
-    .map(
-      (p) => `<li title="${md2rootHtml(p.file)}">
-      <span class="icon-left updown"></span>
-      <span class="icon-left document"></span>
-      <span class="title" contentEditable>${p.title}</span>
-    </li>`
-    )
-    .join('\n');
+  homePage.innerHTML = renderTpl('tplHomePage', { h });
+  morePages.innerHTML = renderTpl('tplMorePages', {
+    pages: pages.filter((p) => !p.used),
+  });
 
   const options = {
     group: 'nested',
@@ -87,21 +67,12 @@ export const editMenu = async () => {
       const { from, item, to } = ev;
       console.log({ from, item, to });
       if (from.getAttribute('id') === 'nuevaCarpeta') {
-        from.innerHTML = `<li>
-          <span class="icon-left updown"></span>
-          <span class="icon-left new-folder"></span>
-          Nueva carpeta
-        </li>`;
-        item.innerHTML = `<span class="icon-left updown"></span>
-          <span class="icon-left folder"></span>
-          <span class="title" contentEditable>--- editar ---</span>
-          <ul class="draggable">
-            <li class="empty">--vacía--</li>
-          </ul>`;
+        from.innerHTML = renderTpl('tplNewFolder');
+        item.innerHTML = renderTpl('tplNewEmptyFolder');
         new Sortable(item.querySelector('.draggable'), options);
       }
       if (from.children.length === 0) {
-        from.innerHTML = `<li class="empty">--vacía--</li>`;
+        from.innerHTML = renderTpl('tplEmptyFolder');
       }
       for (const empty of currentMenu.querySelectorAll('li.empty')) {
         if (empty.closest('ul').children.length > 1) {
