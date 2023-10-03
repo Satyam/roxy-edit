@@ -248,6 +248,7 @@ li.can-t-edit {
   background-color: #e6e6e6;
   border: thin solid gray;
   border-radius: 0.2rem;
+  padding: 2px 0;
 }
 #menuEditor li li {
   background-color: #cccccc;
