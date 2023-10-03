@@ -1,0 +1,14 @@
+<template id="tplDraftsList">
+  <ul>
+    {{@pages}}
+      <li>
+        {{=_val.date}} - <a 
+          href="{{=_val.file}}"
+          {{_val.isNew}}
+            data-is-new
+          {{/_val.isNew}}
+        >{{=_val.title}}</a>
+      </li>
+    {{/@pages}}
+  </ul>
+</template>

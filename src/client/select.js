@@ -1,7 +1,7 @@
 import { sortDescending, slugify, today, onClick } from './utils';
 import { setDataLists, setForm, acceptChanges } from './form';
 import { readMd, removeMd, saveMD } from './files';
-
+import { renderTpl } from './tpl';
 import {
   getDrafts,
   addPostInfo,
@@ -144,15 +144,9 @@ onClick(
       case 'draftPage':
         setFileList(
           CNAMES.DRAFT_PAGE_LIST,
-          `<ul>${getDrafts()
-            .sort(sortDescending)
-            .map(
-              (p) =>
-                `<li>${p.date} - <a href="${p.file}"
-          ${p.isNew ? 'data-is-new' : ''}
-          >${p.title}</a></li>`
-            )
-            .join('')}</ul>`
+          renderTpl('tplDraftsList', {
+            pages: getDrafts().sort(sortDescending),
+          })
         );
         setMdType(false, true);
         break;
@@ -160,15 +154,9 @@ onClick(
       case 'draftPost':
         setFileList(
           CNAMES.DRAFT_POST_LIST,
-          `<ul>${getDrafts(true)
-            .sort(sortDescending)
-            .map(
-              (p) =>
-                `<li>${p.date} - <a href="${p.file}"
-          ${p.isNew ? 'data-is-new' : ''}
-          >${p.title}</a></li>`
-            )
-            .join('')}</ul>`
+          renderTpl('tplDraftsList', {
+            pages: getDrafts(true).sort(sortDescending),
+          })
         );
         setMdType(true, true);
         break;
