@@ -1,29 +1,3 @@
-<!--
-{
-  "Mis propuestas": {
-    "Sesiones Individuales": "/acompanamiento-creativo.html",
-    "Sesiones Grupales: \"Escuchándonos\"": "/talleres-sobre-comunicacion.html",
-    "Talleres de Movimiento Expresivo": "/talleres-de-movimiento.html",
-    "Sesiones de Masaje": "/sesiones-individuales-de-masaje.html"
-  },
-  "Libro: \"la corazón\"": "/libro-la-corazon.html",
-  "Agenda": "/agenda.html",
-  "Más información": {
-    "Trayectoria": "/mas-informacion.html",
-    "Movimiento y conciencia corporal": "/copia-de-conciencia-corporal.html",
-    "Sistema Río Abierto": "/sistema-rio-abierto.html"
-  },
-  "Escritos": {
-    "Recordar quiénes somos": "/recordar-quienes-somos.html",
-    "nueva página": "/nueva-pagina.html",
-    "Había una vez ...": "/habia-una-vez.html",
-    "Pensar y sentir": "/pensar-y-sentir.html",
-    "Conciencia": "/conciencia.html"
-  },
-  "Contacto": "/contacto.html"
-}
--->
-
 <template id="tplHomePage">
   <li title="{{#h.file|md2rootHtml}}">
     <span class="icon-left home"></span>
@@ -40,21 +14,25 @@
     </li>
   {{/@pages}}
 </template>
-<template id="tplLeafItem">
-  <li title="{{=value}}">
-    <span class="icon-left updown"></span>
-    <span class="icon-left document"></span>
-    <span class="title" contentEditable >{{=label}}</span>
-  </li>
+<template id="tplMenu">
+  {{@menu}}
+    {{_val.isString}}
+      <li title="{{=_val.value}}">
+        <span class="icon-left updown"></span>
+        <span class="icon-left document"></span>
+        <span class="title" contentEditable >{{=_val.label}}</span>
+      </li>
+    {{:_val.isString}}
+      <li>
+        <span class="icon-left updown"></span>
+        <span class="icon-left folder"></span>
+        <span class="title" contentEditable>{{=_val.label}}</span>
+        <ul class="draggable">{{#_val.value|renderMenuObj}}</ul>
+      </li>
+    {{/_val.isString}}
+  {{/@menu}}
 </template>
-<template id="tplMainItem">
-  <li>
-    <span class="icon-left updown"></span>
-    <span class="icon-left folder"></span>
-    <span class="title" contentEditable>{{=label}}</span>
-      <ul class="draggable">{{#value|renderMenuObj}}</ul>
-    </li>
-</template>
+
 <template id="tplNewFolder">
   <li>
     <span class="icon-left updown"></span>

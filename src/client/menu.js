@@ -23,28 +23,27 @@ const enableSaveMenu = (enable) => {
 
 enableSaveMenu(false);
 
-const renderMenuObj = (menu) =>
-  Object.keys(menu)
-    .map((label) => {
-      const value = menu[label];
-      if (typeof value === 'string') {
-        pages.some((p) => {
-          if (
-            p.file.replace(basePartRx, '$1') === value.replace(basePartRx, '$1')
-          ) {
-            p.used = true;
-            return true;
-          }
-        });
-        return renderTpl('tplLeafItem', { label, value });
-      } else {
-        return renderTpl('tplMainItem', { label, value }, { renderMenuObj });
-      }
-    })
-    .join('\n');
-
+const renderMenuObj = (menu) => {
+  const menuArray = [];
+  for (const [label, value] of Object.entries(menu)) {
+    const isString = typeof value === 'string';
+    if (isString) {
+      const base = value.replace(basePartRx, '$1');
+      pages.find((p) => p.base === base).used = true;
+    }
+    menuArray.push({
+      label,
+      value,
+      isString,
+    });
+  }
+  return renderTpl('tplMenu', { menu: menuArray }, { renderMenuObj });
+};
 export const editMenu = async () => {
   pages = Array.from(getPages());
+  pages.forEach((p) => {
+    p.base = p.file.replace(basePartRx, '$1');
+  });
 
   const menu = await fetchJson(ROUTES.MENU);
 
