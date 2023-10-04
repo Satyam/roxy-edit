@@ -2,13 +2,19 @@
   "name": "roxy-edit",
   "version": "1.0.0",
   "description": "Roxy's own post editor",
-  "main": "src/server/index.js",
+  "main": "server/index.js",
   "type": "module",
+  "files": [
+    "server/**",
+    "hexo/**",
+    "public/**"
+  ],
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node src/html/pack.mjs && node server/index.js",
     "build": "rollup --config rollup.config.mjs",
     "watch": "rollup -w --config rollup.config.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepack": "node src/html/pack.mjs"
   },
   "repository": {
     "type": "git",
