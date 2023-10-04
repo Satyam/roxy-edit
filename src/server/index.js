@@ -1,8 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import open from 'open';
-import { join, dirname } from 'node:path';
-import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import imgRouter from './images.js';
 import menuRouter from './menu.js';
@@ -14,35 +13,8 @@ import { ROUTES, PORT } from '../common.js';
 
 const app = express();
 
-const handles = /\{\{\s*(\w+)\s*}\}/g;
-
-app.engine('html', async (filePath, options, callback) => {
-  const dir = dirname(filePath);
-  try {
-    const index = await readFile(filePath, 'utf8');
-
-    const matches = index.matchAll(handles);
-    const includes = {};
-    for (const [_, include] of matches) {
-      includes[include] = await readFile(`${join(dir, include)}.html`, 'utf8');
-    }
-    return callback(
-      null,
-      index.replaceAll(handles, (_, include) => includes[include])
-    );
-  } catch (err) {
-    callback(err, '');
-  }
-});
-app.set('views', 'src/html'); // specify the views directory
-app.set('view engine', 'html'); // register the template engine
-
 app.use(bodyParser.json());
 app.use(bodyParser.text({ limit: 5_000_000 }));
-
-app.get('/', (req, res) => {
-  res.render('index.html', {});
-});
 
 app.use(express.static('public'));
 
