@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Roxy's own post editor",
   "main": "server/index.js",
+  "bin": "server/index.js",
   "type": "module",
   "files": [
     "server/**",

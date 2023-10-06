@@ -19,6 +19,7 @@ export default [
     output: {
       file: 'server/index.js',
       format: 'es',
+      banner: '#!/usr/bin/env node',
     },
     watch: {
       include: ['src/server/**', 'src/common/**'],

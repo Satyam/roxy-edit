@@ -1,8 +1,10 @@
 import express from 'express';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 import { readJson, writeJson } from './utils.js';
+import { fileURLToPath } from 'node:url';
 
-export const CWD = process.cwd();
+export const __dirname = dirname(fileURLToPath(import.meta.url));
+export const CWD = dirname(__dirname);
 export const HEXO_DIR = join(CWD, 'hexo/');
 export const DOCUMENT_ROOT = join(CWD, 'server/');
 export const IMG_DIR = 'assets/img/';
