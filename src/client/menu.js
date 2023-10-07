@@ -50,10 +50,14 @@ export const editMenu = async () => {
   currentMenu.innerHTML = renderMenuObj(menu);
   const h = pages.find((p) => p.file === 'index.md');
   h.used = true;
-  homePage.innerHTML = renderTpl('tplHomePage', { h });
-  morePages.innerHTML = renderTpl('tplMorePages', {
-    pages: pages.filter((p) => !p.used),
-  });
+  homePage.innerHTML = renderTpl('tplHomePage', { h }, { md2rootHtml });
+  morePages.innerHTML = renderTpl(
+    'tplMorePages',
+    {
+      pages: pages.filter((p) => !p.used),
+    },
+    { md2rootHtml }
+  );
 
   const options = {
     group: 'nested',
