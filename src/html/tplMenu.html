@@ -1,5 +1,5 @@
 <template id="tplHomePage">
-  <li title="{{#h.file|md2rootHtml}}">
+  <li title="{{=h.file|md2rootHtml}}">
     <span class="icon-left home"></span>
     <span class="icon-left document"></span>
     {{=h.title}}
@@ -7,7 +7,7 @@
 </template>
 <template id="tplMorePages">
   {{@pages}}
-    <li title="{{#_val|md2rootHtml}}">
+    <li title="{{=_val.file|md2rootHtml}}">
       <span class="icon-left updown"></span>
       <span class="icon-left document"></span>
       <span class="title" contentEditable>{{=_val.title}}</span>
@@ -27,7 +27,7 @@
         <span class="icon-left updown"></span>
         <span class="icon-left folder"></span>
         <span class="title" contentEditable>{{=_val.label}}</span>
-        <ul class="draggable">{{#_val.value|renderMenuObj}}</ul>
+        <ul class="draggable">{{=_val.value|renderMenuObj}}</ul>
       </li>
     {{/_val.isString}}
   {{/@menu}}

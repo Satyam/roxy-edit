@@ -1,6 +1,6 @@
 const blockregex =
   /\{\{(([@!]?)([\.\w]+)[\s\S]*?)\}\}(([\s\S]+?)(\{\{:\1\}\}([\s\S]+?))?)\{\{\/\1\}\}/g;
-const valregex = /\{\{([=%#])(.+?)\}\}/g;
+const valregex = /\{\{([=%])([\.\w]+?)\s*(\|\s*([\w,]+))?\s*\}\}/g;
 
 const scrub = (val) => new Option(val).innerHTML.replace(/"/g, '&quot;');
 
@@ -57,18 +57,17 @@ export const renderString = (fragment, vars, formatters = {}) => {
         }
       }
     )
-    .replace(valregex, (_, meta, key) => {
-      if (meta == '#') {
-        const [_key, fns] = key.split('|');
-        return fns
+    .replace(valregex, (_, meta, key, __, fns) => {
+      let val = get_value(vars, key);
+      if (fns) {
+        val = fns
           .split(',')
           .reduce(
             (val, fn) =>
               typeof formatters[fn] == 'function' ? formatters[fn](val) : val,
-            get_value(vars, _key)
+            val
           );
       }
-      const val = get_value(vars, key);
 
       if (val || val === 0) {
         return meta == '%' ? scrub(val) : val;
