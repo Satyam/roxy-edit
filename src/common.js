@@ -8,5 +8,3 @@ export const ROUTES = {
   VIEW: '/view',
   ROXY: '/roxanacabut',
 };
-
-export const PORT = 3000;

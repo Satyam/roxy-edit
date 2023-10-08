@@ -9,7 +9,7 @@ import filesRouter from './files.js';
 import hexoRouter from './hexo.js';
 import viewRouter from './view.js';
 import { CWD, infoRouter } from './data.js';
-import { ROUTES, PORT } from '../common.js';
+import { ROUTES } from '../common.js';
 
 const app = express();
 
@@ -37,7 +37,7 @@ app.get(join(ROUTES.EXIT, '/:code?'), (req, res) => {
   process.exit(req.params.code ?? 0);
 });
 
-app.listen(PORT, async () => {
-  console.log(`Example app listening on port ${PORT}`);
-  await open(`http://localhost:${PORT}`);
+const server = app.listen(0, async () => {
+  console.log(`Example app listening on port ${server.address().port}`);
+  await open(`http://localhost:${server.address().port}`);
 });

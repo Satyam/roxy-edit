@@ -36,8 +36,7 @@ export const renderString = (fragment, vars, formatters = {}) => {
           return renderString(if_true, vars, formatters);
         }
 
-        // process array/obj iteration
-        // TODO do separate loops for regular objects and maps.
+        // process array/obj/Map iteration
         if (meta === '@') {
           const out = [];
           for (const [_key, _val] of val.entries()) {
