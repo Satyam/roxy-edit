@@ -2,7 +2,15 @@ const blockregex =
   /\{\{(([@!]?)([\.\w]+)[\s\S]*?)\}\}(([\s\S]+?)(\{\{:\1\}\}([\s\S]+?))?)\{\{\/\1\}\}/g;
 const valregex = /\{\{([=%])([\.\w]+?)\s*(\|\s*([\w,]+))?\s*\}\}/g;
 
-const scrub = (val) => new Option(val).innerHTML.replace(/"/g, '&quot;');
+export const scrub =
+  typeof Option === 'function'
+    ? (val) => new Option(val).innerHTML.replace(/"/g, '&quot;')
+    : (val) =>
+        val
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;');
 
 const get_value = (vars, key) =>
   key
