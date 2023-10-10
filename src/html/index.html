@@ -9,24 +9,22 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
+  <!-- prettier-ignore-->
   <body>
-    {{header}}
-    <!-- prettier-ignore-->
+    {{>header}}
     <main id="main">
-      {{select}} 
-      {{editor}} 
-      {{menuEditor}} 
-      {{site}}
-    </main>
+      {{>select}} 
+      {{>editor}} 
+      {{>menuEditor}} 
+      {{>site}}</main>
     <canvas id="canvas" width="800" height="600"></canvas>
-    {{dialog}}
-    <!-- prettier-ignore-->
+    {{>dialog}}
     <div>
-      {{tplPagesList}} 
-      {{tplPostsList}}
-      {{tplForm}}
-      {{tplMenu}}
-      {{tplSelect}}
+      {{>tplPagesList}} 
+      {{>tplPostsList}}
+      {{>tplForm}}
+      {{>tplMenu}}
+      {{>tplSelect}}
     </div>
     <script src="node_modules/sortablejs/Sortable.min.js"></script>
     <script src="main.js"></script>

@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
-const handles = /\{\{\s*(\w+)\s*}\}/g;
+const handles = /\{\{>\s*(\w+)\s*}\}/g;
 
 const index = await readFile('src/html/index.html', 'utf8');
 
