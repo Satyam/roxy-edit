@@ -20,8 +20,8 @@ const get_value = (vars, key) =>
       vars
     );
 
-export const renderString = (fragment, vars, formatters = {}) => {
-  return fragment
+export const renderString = (fragment, vars, formatters = {}) =>
+  fragment
     .replace(
       blockregex,
       (_, __, meta, key, inner, if_true, has_else, if_false) => {
@@ -46,21 +46,17 @@ export const renderString = (fragment, vars, formatters = {}) => {
 
         // process array/obj/Map iteration
         if (meta === '@') {
-          const out = [];
-          for (const [_key, _val] of val.entries()) {
-            out.push(
-              renderString(
-                inner,
-                {
-                  ...vars,
-                  _key,
-                  _val,
-                },
-                formatters
-              )
-            );
-          }
-          return out.join('');
+          return Array.from(val.entries(), ([_key, _val]) =>
+            renderString(
+              inner,
+              {
+                ...vars,
+                _key,
+                _val,
+              },
+              formatters
+            )
+          ).join('');
         }
       }
     )
@@ -78,7 +74,6 @@ export const renderString = (fragment, vars, formatters = {}) => {
       }
       return '';
     });
-};
 
 export const renderTpl = (id, vars, formatters) =>
   renderString(document.getElementById(id).innerHTML, vars, formatters);
