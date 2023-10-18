@@ -46,16 +46,18 @@ export const renderString = (fragment, vars, formatters = {}) =>
 
         // process array/obj/Map iteration
         if (meta === '@') {
-          return Array.from(val.entries(), ([_key, _val]) =>
-            renderString(
-              inner,
-              {
-                ...vars,
-                _key,
-                _val,
-              },
-              formatters
-            )
+          return Array.from(
+            !!val?.[Symbol.iterator] ? val.entries() : Object.entries(val),
+            ([_key, _val]) =>
+              renderString(
+                inner,
+                {
+                  ...vars,
+                  _key,
+                  _val,
+                },
+                formatters
+              )
           ).join('');
         }
       }
