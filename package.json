@@ -11,11 +11,15 @@
     "public/**"
   ],
   "scripts": {
-    "start": "node src/html/pack.mjs && node server/index.js",
-    "build": "rollup --config rollup.config.mjs",
+    "start:plain": "node src/html/pack.mjs && node server/index.js",
+    "start:solid": "node server/index.js",
+    "build:plain": "rollup --config rollup.config.mjs",
+    "build:solid": "vite build",
     "watch": "rollup -w --config rollup.config.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepack": "node src/html/pack.mjs"
+    "prepack": "node src/html/pack.mjs",
+    "dev": "vite",
+    "preview": "vite preview"
   },
   "repository": {
     "type": "git",
@@ -44,12 +48,15 @@
     "open": "^9.1.0",
     "sortablejs": "^1.15.0",
     "suneditor": "^2.45.1",
-    "yaml": "^2.3.2"
+    "yaml": "^2.3.2",
+    "solid-js": "^1.7.8"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
-    "rollup": "^3.29.2"
+    "rollup": "^3.29.2",
+    "vite": "^4.4.5",
+    "vite-plugin-solid": "^2.7.0"
   }
 }

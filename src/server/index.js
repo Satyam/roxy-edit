@@ -16,7 +16,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.text({ limit: 5_000_000 }));
 
-app.use(express.static(join(CWD, 'public')));
+app.use(express.static(join(CWD, 'dist')));
+// app.use(express.static(join(CWD, 'public')));
 
 app.use('/node_modules', express.static('node_modules'));
 app.use(ROUTES.ROXY, express.static(join(CWD, 'hexo/public')));

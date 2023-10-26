@@ -1,0 +1,10 @@
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  border-bottom: black solid thin;
+  margin-bottom: 0.5rem;
+}
+
+.header button {
+  width: 80%;
+}
