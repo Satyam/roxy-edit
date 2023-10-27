@@ -1,5 +1,6 @@
 import { createSignal, Switch, Match } from 'solid-js';
 import classes from './App.module.css';
+import Select from './Select';
 
 function App() {
   const [activeTab, setActiveTab] = createSignal('select');
@@ -41,8 +42,14 @@ function App() {
         </button>
       </header>
       <main>
-        <Switch fallback={<div>Select tab from above</div>}>
-          <Match when={activeTab() === 'select'}>Estamos en SELECT</Match>
+        <Switch
+          fallback={
+            <div>Seleccione alguna opción de los botones de arriba</div>
+          }
+        >
+          <Match when={activeTab() === 'select'}>
+            <Select />
+          </Match>
           <Match when={activeTab() === 'menuEditor'}>
             Estamos en MENU Edit
           </Match>
