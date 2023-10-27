@@ -14,7 +14,7 @@
     "start:plain": "node src/html/pack.mjs && node server/index.js",
     "start:solid": "node server/index.js",
     "build:plain": "rollup --config rollup.config.mjs",
-    "build:solid": "vite build",
+    "build:solid": "vite build --sourcemap true",
     "watch": "rollup -w --config rollup.config.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepack": "node src/html/pack.mjs",
