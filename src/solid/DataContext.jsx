@@ -17,8 +17,8 @@ export function DataProvider(props) {
 
   const providerValue = [
     data,
-    async (newData) => {
-      setStoredData(newData);
+    async (...newData) => {
+      setStoredData(...newData);
       await sendJson(ROUTES.INFO, data);
     },
   ];
