@@ -1,7 +1,7 @@
 import { join } from './utils';
 import { parse, stringify } from './frontmatter';
 import { isPost, isDraft, fileName } from './state';
-import { deleteFile, fetchText, sendText } from './fetch';
+import { deleteFile, fetchText, sendText } from '../fetch';
 import { ROUTES } from '../common';
 const url = (draft) =>
   join(ROUTES.FILES, !!(draft ?? isDraft), !!isPost, fileName);

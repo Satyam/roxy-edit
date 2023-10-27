@@ -4,7 +4,7 @@ import { onClick, md2rootHtml } from './utils';
 // import Sortable from 'sortablejs';
 import { renderTpl } from './tpl';
 import { getPages } from './data';
-import { fetchJson, sendJson } from './fetch';
+import { fetchJson, sendJson } from '../fetch';
 import { ROUTES } from '../common';
 
 let pages = [];

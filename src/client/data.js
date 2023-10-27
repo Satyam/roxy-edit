@@ -1,6 +1,6 @@
 import { join } from './utils';
 import { fileName, isPost, isNew } from './state';
-import { fetchJson, sendJson } from './fetch';
+import { fetchJson, sendJson } from '../fetch';
 
 export const HEXO_DIR = 'hexo/';
 export const DOCUMENT_ROOT = 'resources/';
