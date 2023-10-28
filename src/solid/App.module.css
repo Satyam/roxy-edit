@@ -1,10 +1,13 @@
 .header {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  border-bottom: black solid thin;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   margin-bottom: 0.5rem;
+  background-color: darkblue;
+  color: aliceblue;
 }
 
 .header button {
   width: 80%;
+  background-color: inherit;
+  color: inherit;
 }

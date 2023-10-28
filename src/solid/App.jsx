@@ -1,10 +1,22 @@
-import { createSignal, Switch, Match } from 'solid-js';
+import { createSignal, Switch, Match, onCleanup } from 'solid-js';
 import classes from './App.module.css';
 import Select from './Select';
 import Icon from './Icon';
+import { join } from './utils';
+import { ROUTES } from '../common';
+
+const exit = async (err = 0) => {
+  await fetch(join(ROUTES.EXIT, Number(err)));
+  window.close();
+};
+window.addEventListener('beforeunload', () => {
+  exit();
+});
 
 function App() {
   const [activeTab, setActiveTab] = createSignal('select');
+
+  onCleanup(exit);
 
   const clickHandler = (ev) => {
     setActiveTab(ev.target.name);
@@ -37,11 +49,8 @@ function App() {
           <Icon name="cloud" />
           Adm. Sitio
         </button>
-        <button
-          name="exit"
-          onclick={clickHandler}
-          disabled={activeTab() === 'exit'}
-        >
+        <div></div>
+        <button name="exit" onclick={(ev) => exit()}>
           <Icon name="exit" />
           Salir
         </button>
