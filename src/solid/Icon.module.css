@@ -1,0 +1,10 @@
+.left {
+  height: 1rem;
+  margin-right: 0.5rem;
+  fill: currentColor;
+}
+.right {
+  height: 1rem;
+  margin-left: 0.5rem;
+  fill: currentColor;
+}
