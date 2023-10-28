@@ -1,6 +1,7 @@
 import { createSignal, Switch, Match } from 'solid-js';
 import classes from './App.module.css';
 import Select from './Select';
+import Icon from './Icon';
 
 function App() {
   const [activeTab, setActiveTab] = createSignal('select');
@@ -17,28 +18,32 @@ function App() {
           onclick={clickHandler}
           disabled={activeTab() === 'select'}
         >
-          <span class="icon-left documents"></span>Páginas / Posts
+          <Icon name="documents" />
+          Páginas / Posts
         </button>
         <button
           name="menuEditor"
           onclick={clickHandler}
           disabled={activeTab() === 'menuEditor'}
         >
-          <span class="icon-left edit-menu"></span>Editor de Menú
+          <Icon name="edit-menu" />
+          Editor de Menú
         </button>
         <button
           name="site"
           onclick={clickHandler}
           disabled={activeTab() === 'site'}
         >
-          <span class="icon-left cloud"></span>Adm. Sitio
+          <Icon name="cloud" />
+          Adm. Sitio
         </button>
         <button
           name="exit"
           onclick={clickHandler}
           disabled={activeTab() === 'exit'}
         >
-          <span class="icon-left exit"></span>Salir
+          <Icon name="exit" />
+          Salir
         </button>
       </header>
       <main>

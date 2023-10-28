@@ -1,5 +1,6 @@
 import { createSignal, Switch, Match } from 'solid-js';
 import ListPages from './ListPages';
+import Icon from './Icon';
 
 function Select() {
   const [selection, setSelection] = createSignal('');
@@ -19,21 +20,24 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'newPage'}
             >
-              <span class="icon-left new-doc"></span>Nueva
+              <Icon name="new-doc" />
+              Nueva
             </button>
             <button
               name="editPage"
               onclick={clickHandler}
               disabled={selection() === 'editPage'}
             >
-              <span class="icon-left edit-doc"></span>Modificar
+              <Icon name="edit-doc" />
+              Modificar
             </button>
             <button
               name="draftPage"
               onclick={clickHandler}
               disabled={selection() === 'draftPage'}
             >
-              <span class="icon-left draft-doc"></span>Borradores
+              <Icon name="draft-doc" />
+              Borradores
             </button>
           </fieldset>
           <fieldset>
@@ -43,21 +47,24 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'newPost'}
             >
-              <span class="icon-left new-doc"></span>Nuevo
+              <Icon name="new-doc" />
+              Nuevo
             </button>
             <button
               name="editPost"
               onclick={clickHandler}
               disabled={selection() === 'editPost'}
             >
-              <span class="icon-left edit-doc"></span>Modificar
+              <Icon name="edit-doc" />
+              Modificar
             </button>
             <button
               name="draftPost"
               onclick={clickHandler}
               disabled={selection() === 'draftPost'}
             >
-              <span class="icon-left draft-doc"></span>Borradores
+              <Icon name="draft-doc" />
+              Borradores
             </button>
           </fieldset>
         </div>

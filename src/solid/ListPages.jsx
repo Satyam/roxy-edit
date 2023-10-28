@@ -1,5 +1,6 @@
 import { For, createMemo } from 'solid-js';
 import { useData } from './DataContext';
+import Icon from './Icon';
 
 export function ListPages() {
   const [data] = useData();
@@ -23,7 +24,7 @@ export function ListPages() {
   return (
     <div>
       <p>
-        <span class="icon-left home"></span>
+        <Icon name="home" />
         <a href={home().file}>{home().title}</a>
       </p>
       <ul>
