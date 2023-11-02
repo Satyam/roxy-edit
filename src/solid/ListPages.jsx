@@ -24,7 +24,7 @@ export function ListPages() {
   return (
     <div>
       <p>
-        <Icon name="home" />
+        <Icon>home</Icon>
         <a href={home().file}>{home().title}</a>
       </p>
       <ul>

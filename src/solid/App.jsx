@@ -30,7 +30,7 @@ function App() {
           onclick={clickHandler}
           disabled={activeTab() === 'select'}
         >
-          <Icon name="documents" />
+          <Icon>documents</Icon>
           Páginas / Posts
         </button>
         <button
@@ -38,7 +38,7 @@ function App() {
           onclick={clickHandler}
           disabled={activeTab() === 'menuEditor'}
         >
-          <Icon name="edit-menu" />
+          <Icon>edit-menu</Icon>
           Editor de Menú
         </button>
         <button
@@ -46,12 +46,12 @@ function App() {
           onclick={clickHandler}
           disabled={activeTab() === 'site'}
         >
-          <Icon name="cloud" />
+          <Icon>cloud</Icon>
           Adm. Sitio
         </button>
         <div></div>
         <button name="exit" onclick={(ev) => exit()}>
-          <Icon name="exit" />
+          <Icon>exit</Icon>
           Salir
         </button>
       </header>

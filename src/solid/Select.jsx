@@ -20,7 +20,7 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'newPage'}
             >
-              <Icon name="new-doc" />
+              <Icon>new-doc</Icon>
               Nueva
             </button>
             <button
@@ -28,7 +28,7 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'editPage'}
             >
-              <Icon name="edit-doc" />
+              <Icon>edit-doc</Icon>
               Modificar
             </button>
             <button
@@ -36,7 +36,7 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'draftPage'}
             >
-              <Icon name="draft-doc" />
+              <Icon>draft-doc</Icon>
               Borradores
             </button>
           </fieldset>
@@ -47,7 +47,7 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'newPost'}
             >
-              <Icon name="new-doc" />
+              <Icon>new-doc</Icon>
               Nuevo
             </button>
             <button
@@ -55,7 +55,7 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'editPost'}
             >
-              <Icon name="edit-doc" />
+              <Icon>edit-doc</Icon>
               Modificar
             </button>
             <button
@@ -63,7 +63,7 @@ function Select() {
               onclick={clickHandler}
               disabled={selection() === 'draftPost'}
             >
-              <Icon name="draft-doc" />
+              <Icon>draft-doc</Icon>
               Borradores
             </button>
           </fieldset>
