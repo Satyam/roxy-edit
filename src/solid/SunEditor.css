@@ -1,0 +1,17 @@
+.sun-editor button > svg {
+  height: 12px;
+  width: 12px;
+}
+
+.sun-editor .se-btn {
+  height: 30px;
+  width: 30px;
+}
+
+.sun-editor .se-btn-tray {
+  padding: 3px 2px 0%;
+}
+
+.canvas {
+  display: none;
+}
