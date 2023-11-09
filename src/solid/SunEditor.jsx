@@ -7,24 +7,24 @@ import { plugin_dialog } from '../client/linkDialog';
 import { onMount, onCleanup, createSignal } from 'solid-js';
 import './SunEditor.css';
 
-const [editor, setEditor] = createSignal();
 const [contents, _setContents] = createSignal();
 const [changed, setChanged] = createSignal();
 
 let canvas;
+let _editor;
 
 export const useEditor = () => {
   const acceptChanges = () => {
     setChanged(false);
   };
   const setContents = (contents) => {
-    editor().setContents(contents);
+    _editor.setContents(contents);
     acceptChanges();
   };
 
   const replaceImages = async () => {
     const ctx = canvas.getContext('2d');
-    const images = editor().getImagesInfo();
+    const images = _editor.getImagesInfo();
     let anyChanges = false;
 
     for (const img of images) {
@@ -47,7 +47,7 @@ export const useEditor = () => {
         console.error('response not ok');
       }
     }
-    if (anyChanges) _setContents(editor().getContents());
+    if (anyChanges) _setContents(_editor.getContents());
   };
 
   return {
@@ -61,10 +61,9 @@ export const useEditor = () => {
 
 export function SunEditor(props) {
   let area;
-  let editor;
   onMount(() => {
     console.log('onmount');
-    editor = suneditor.create(area, {
+    _editor = suneditor.create(area, {
       height: '300',
       width: '100%',
       defaultTag: '',
@@ -133,7 +132,7 @@ export function SunEditor(props) {
       lang: es,
     });
 
-    editor.onChange = (newContents) => {
+    _editor.onChange = (newContents) => {
       console.log('onChange');
       const changed = newContents !== contents();
       if (changed) {
@@ -142,9 +141,8 @@ export function SunEditor(props) {
       }
     };
 
-    setEditor(editor);
     if (props.contents) {
-      editor.setContents(props.contents);
+      _editor.setContents(props.contents);
     }
   });
 
