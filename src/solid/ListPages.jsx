@@ -1,9 +1,9 @@
 import { For, createMemo } from 'solid-js';
-import { useData } from './DataContext';
+import siteInfo from './siteInfo';
 import Icon from './Icon';
 
 export function ListPages() {
-  const [data] = useData();
+  const { info: data } = siteInfo;
 
   const drafts = createMemo(() => data.drafts);
   const home = createMemo(() => data.pages[0]);
