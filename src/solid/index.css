@@ -34,3 +34,14 @@ button.warning {
   grid-template-columns: 1fr 2fr;
   gap: 20px;
 }
+
+.two-halves {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.two-halves input,
+.two-halves select {
+  width: 100%;
+}
