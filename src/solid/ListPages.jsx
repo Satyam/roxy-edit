@@ -1,14 +1,18 @@
 import { For, createMemo } from 'solid-js';
-import siteInfo from './siteInfo';
 import Icon from './Icon';
+import siteInfo from './siteInfo';
+import docData from './docData';
+import { activeTabSignal, TABS } from './activeTab';
 
 export function ListPages() {
-  const { info: data } = siteInfo;
+  const { info } = siteInfo;
+  const [_, setActiveTab] = activeTabSignal;
+  const { setDoc, resetDoc, fetchMd } = docData;
+  const drafts = createMemo(() => info.drafts);
+  const home = createMemo(() => info.pages[0]);
 
-  const drafts = createMemo(() => data.drafts);
-  const home = createMemo(() => data.pages[0]);
   const p = createMemo(() =>
-    data.pages
+    info.pages
       .slice(1)
       .sort((a, b) => {
         if (a.title > b.title) return 1;
@@ -20,6 +24,14 @@ export function ListPages() {
         borrador: drafts().some((d) => d.file === p.file),
       }))
   );
+
+  const clickHandler = async ({ file, title }, ev) => {
+    ev.preventDefault();
+    resetDoc();
+    setDoc({ fileName: file, title, isPost: false });
+    fetchMd();
+    setActiveTab(TABS.EDITOR);
+  };
 
   return (
     <div>
@@ -36,7 +48,9 @@ export function ListPages() {
               </li>
             ) : (
               <li>
-                <a href={page.file}>{page.title}</a>
+                <a href={page.file} onClick={[clickHandler, page]}>
+                  {page.title}
+                </a>
               </li>
             )
           }
