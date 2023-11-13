@@ -1,11 +1,12 @@
 import { Switch, Match, onCleanup } from 'solid-js';
-import classes from './App.module.css';
 import Select from './Select';
 import Icon from './Icon';
 import { join } from './utils';
 import { ROUTES } from '../common';
 import { activeTabSignal, TABS } from './activeTab';
 import Editor from './Editor';
+
+import './App.css';
 
 const exit = async (err = 0) => {
   await fetch(join(ROUTES.EXIT, Number(err)));
@@ -26,7 +27,7 @@ function App() {
 
   return (
     <>
-      <header class={classes.header}>
+      <header>
         <button
           name={TABS.SELECT}
           onclick={clickHandler}
