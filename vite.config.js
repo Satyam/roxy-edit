@@ -6,6 +6,14 @@ export default defineConfig({
   build: {
     outDir: '../../dist',
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // solidjs: ['solid-js'],
+          suneditor: ['suneditor'],
+        },
+      },
+    },
   },
   plugins: [solid()],
 });
