@@ -1,4 +1,4 @@
-import { createRoot, createResource } from 'solid-js';
+import { createRoot, createResource, createEffect } from 'solid-js';
 import { createStore, reconcile } from 'solid-js/store';
 import { fetchJson, sendJson } from '../fetch';
 import { ROUTES } from '../common';
@@ -15,17 +15,28 @@ const defaultInfo = {
 export default createRoot(() => {
   const [info, _setInfo] = createStore(defaultInfo);
 
-  createResource(() => fetchJson(ROUTES.INFO), {
-    storage: () => [() => info, (getter) => _setInfo(reconcile(getter()))],
+  const [fetchStatus] = createResource(fetchJson(ROUTES.INFO), {
     initialValue: defaultInfo,
   });
 
-  const setInfo = async (...newInfo) => {
+  createEffect(() => {
+    if (fetchStatus.state === 'ready') {
+      _setInfo(reconcile(fetchStatus()));
+    }
+  });
+
+  const [saveStatus, { refetch }] = createResource((_, { refetching }) => {
+    if (refetching) sendJson(ROUTES.INFO, info);
+  });
+
+  const setInfo = (...newInfo) => {
     _setInfo(...newInfo);
-    await sendJson(ROUTES.INFO, info);
+    refetch();
   };
 
   return {
+    fetchStatus,
+    saveStatus,
     info,
     setInfo,
   };

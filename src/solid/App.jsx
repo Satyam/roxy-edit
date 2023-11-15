@@ -1,9 +1,10 @@
-import { Switch, Match, onCleanup } from 'solid-js';
+import { Switch, Match, onCleanup, Show } from 'solid-js';
 import Select from './Select';
 import Icon from './Icon';
 import { join } from './utils';
 import { ROUTES } from '../common';
 import { activeTabSignal, TABS } from './activeTab';
+import siteInfo from './siteInfo';
 import Editor from './Editor';
 
 import './App.css';
@@ -12,11 +13,13 @@ const exit = async (err = 0) => {
   await fetch(join(ROUTES.EXIT, Number(err)));
   window.close();
 };
+
 window.addEventListener('beforeunload', () => {
   exit();
 });
 
 function App() {
+  const { fetchStatus } = siteInfo;
   const [activeTab, setActiveTab] = activeTabSignal;
 
   onCleanup(exit);
@@ -26,7 +29,7 @@ function App() {
   };
 
   return (
-    <>
+    <Show when={!fetchStatus.loading} fallback={<div>Loading ....</div>}>
       <header>
         <button
           name={TABS.SELECT}
@@ -75,7 +78,7 @@ function App() {
           <Match when={activeTab() === TABS.EXIT}>Estamos en EXIT</Match>
         </Switch>
       </main>
-    </>
+    </Show>
   );
 }
 
