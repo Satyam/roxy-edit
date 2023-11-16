@@ -15,7 +15,7 @@ const defaultInfo = {
 export default createRoot(() => {
   const [info, _setInfo] = createStore(defaultInfo);
 
-  const [fetchStatus] = createResource(fetchJson(ROUTES.INFO), {
+  const [fetchStatus] = createResource(() => fetchJson(ROUTES.INFO), {
     initialValue: defaultInfo,
   });
 
