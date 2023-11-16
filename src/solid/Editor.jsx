@@ -32,14 +32,16 @@ function checkValid({ element, validators = [] }, setErrors, errorClass) {
     }
   };
 }
+
 export function Editor(props) {
-  const { doc } = docData;
+  const { doc, readStatus } = docData;
   const { info } = siteInfo;
+
   console.log(doc);
   // return <pre>{JSON.stringify(doc, null, 2)}</pre>;
 
   return (
-    <>
+    <Show when={!readStatus.loading} fallback={<div>Leyendo ....</div>}>
       <form id="form" novalidate>
         <div>
           <label>
@@ -141,7 +143,7 @@ export function Editor(props) {
       </form>
 
       <SunEditor contents={doc.contents} />
-    </>
+    </Show>
   );
 }
 

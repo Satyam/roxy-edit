@@ -28,8 +28,8 @@ export default createRoot(() => {
   const url = (draft) =>
     join(ROUTES.FILES, !!(draft ?? doc.isDraft), !!doc.isPost, doc.fileName);
 
-  const readMd = async () => {
-    if (doc.fileName) {
+  const readMd = async (_, { refetching }) => {
+    if (refetching && doc.fileName) {
       const md = await fetchText(url());
       const m = md.match(sepRx);
       if (!m) return m;
@@ -44,27 +44,23 @@ export default createRoot(() => {
     return defaultValues;
   };
 
-  const [resource, { refetch }] = createResource(readMd, {
-    storage: () => [() => doc, (getter) => setDoc(reconcile(getter()))],
+  const [readStatus, { refetch: readDoc }] = createResource(readMd, {
     initialValue: defaultValues,
   });
 
   createEffect(() => {
-    console.log('fetch:', resource.state);
+    if (readStatus.state === 'ready') {
+      setDoc(reconcile(readStatus()));
+    }
   });
 
-  const removeMd = async (both = false) => {
-    if (doc.isDraft) await deleteFile(url(true));
-    if (both) {
-      await deleteFile(url(false));
-    }
-  };
-
-  const saveMd = async () =>
-    sendText(
-      url(),
-      // Leave no blank spaces to the left of this template string:
-      `---
+  const [saveStatus, { refetch: saveDoc }] = createResource(
+    (_, { refetching }) => {
+      if (refetching)
+        sendText(
+          url(),
+          // Leave no blank spaces to the left of this template string:
+          `---
 ${YAML.stringify({
   title: doc.title,
   date: doc.date,
@@ -74,7 +70,31 @@ ${YAML.stringify({
 })}
 ---
 ${doc.contents}`
-    );
+        );
+    }
+  );
 
-  return { doc, setDoc, resetDoc, fetchMd: refetch, removeMd, saveMd };
+  const [removeStatus, { refetch: removeDoc }] = createResource(
+    async (_, { refetching }) => {
+      if (refetching) {
+        if (doc.isDraft) await deleteFile(url(true));
+        if (refetching === 'both') {
+          await deleteFile(url(false));
+        }
+        resetDoc();
+      }
+    }
+  );
+
+  return {
+    doc,
+    setDoc,
+    resetDoc,
+    readDoc,
+    readStatus,
+    saveDoc,
+    saveStatus,
+    removeDoc,
+    removeStatus,
+  };
 });

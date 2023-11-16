@@ -7,7 +7,7 @@ import { activeTabSignal, TABS } from './activeTab';
 export function ListPages() {
   const { info } = siteInfo;
   const [_, setActiveTab] = activeTabSignal;
-  const { setDoc, resetDoc, fetchMd } = docData;
+  const { setDoc, resetDoc, readDoc } = docData;
   const drafts = createMemo(() => info.drafts);
   const home = createMemo(() => info.pages[0]);
 
@@ -29,7 +29,7 @@ export function ListPages() {
     ev.preventDefault();
     resetDoc();
     setDoc({ fileName: file, title, isPost: false });
-    fetchMd();
+    readDoc();
     setActiveTab(TABS.EDITOR);
   };
 
