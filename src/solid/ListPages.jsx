@@ -1,13 +1,13 @@
 import { For, createMemo } from 'solid-js';
 import Icon from './Icon';
-import siteInfo from './siteInfo';
-import docData from './docData';
+import useSiteInfo from './useSiteInfo';
+import useDocData from './useDocData';
 import { activeTabSignal, TABS } from './activeTab';
 
 export function ListPages() {
-  const { info } = siteInfo;
+  const { info } = useSiteInfo;
   const [_, setActiveTab] = activeTabSignal;
-  const { setDoc, resetDoc, readDoc } = docData;
+  const { setDoc, resetDoc, readDoc } = useDocData;
   const drafts = createMemo(() => info.drafts);
   const home = createMemo(() => info.pages[0]);
 

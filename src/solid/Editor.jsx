@@ -2,8 +2,8 @@ import { Show, For } from 'solid-js';
 import SunEditor from './SunEditor';
 import Icon from './Icon';
 import { createStore } from 'solid-js/store';
-import docData from './docData';
-import siteInfo from './siteInfo';
+import useDocData from './useDocData';
+import useSiteInfo from './useSiteInfo';
 import SplitSelList from './SplitSelList';
 import { today } from './utils';
 
@@ -34,8 +34,8 @@ function checkValid({ element, validators = [] }, setErrors, errorClass) {
 }
 
 export function Editor(props) {
-  const { doc, readStatus } = docData;
-  const { info } = siteInfo;
+  const { doc, readStatus } = useDocData;
+  const { info } = useSiteInfo;
 
   console.log(doc);
   // return <pre>{JSON.stringify(doc, null, 2)}</pre>;
