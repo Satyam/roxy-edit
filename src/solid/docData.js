@@ -23,13 +23,14 @@ const sepRx = /^---\n(?<fm>.*)\n---\s*(?<contents>.*)$/s;
 
 export default createRoot(() => {
   const [doc, setDoc] = createStore(defaultValues);
-  const resetDoc = () => setDoc(defaultValues);
+  const resetDoc = (overrides) => setDoc({ ...defaultValues, ...overrides });
 
   const url = (draft) =>
     join(ROUTES.FILES, !!(draft ?? doc.isDraft), !!doc.isPost, doc.fileName);
 
   const readMd = async (_, { refetching }) => {
-    if (refetching && doc.fileName) {
+    if (typeof refetching === 'object') {
+      resetDoc(refetching);
       const md = await fetchText(url());
       const m = md.match(sepRx);
       if (!m) return m;

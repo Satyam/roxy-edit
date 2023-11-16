@@ -27,9 +27,7 @@ export function ListPages() {
 
   const clickHandler = async ({ file, title }, ev) => {
     ev.preventDefault();
-    resetDoc();
-    setDoc({ fileName: file, title, isPost: false });
-    readDoc();
+    readDoc({ fileName: file, title, isPost: false });
     setActiveTab(TABS.EDITOR);
   };
 
