@@ -1,5 +1,6 @@
 import { createSignal, Switch, Match } from 'solid-js';
 import ListPages from './ListPages';
+import ListPosts from './ListPosts';
 import Icon from './Icon';
 
 const BUTTONS = {
@@ -90,7 +91,7 @@ function Select() {
           Estamos en newPost
         </Match>
         <Match when={selection() === BUTTONS.EDIT_POST}>
-          Estamos en editPost
+          <ListPosts />
         </Match>
         <Match when={selection() === BUTTONS.DRAFT_POST}>
           Estamos en draftPost
