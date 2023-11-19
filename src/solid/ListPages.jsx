@@ -7,7 +7,7 @@ import { activeTabSignal, TABS } from './activeTab';
 export function ListPages() {
   const { info } = useSiteInfo;
   const [_, setActiveTab] = activeTabSignal;
-  const { setDoc, resetDoc, readDoc } = useDocData;
+  const { readDoc } = useDocData;
   const drafts = createMemo(() => info.drafts);
   const home = createMemo(() => info.pages[0]);
 
@@ -25,7 +25,7 @@ export function ListPages() {
       }))
   );
 
-  const clickHandler = async ({ file, title }, ev) => {
+  const clickHandler = ({ file, title }, ev) => {
     ev.preventDefault();
     readDoc({ fileName: file, title, isPost: false });
     setActiveTab(TABS.EDITOR);
