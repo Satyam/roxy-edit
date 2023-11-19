@@ -38,6 +38,7 @@ export default createRoot(() => {
       const matter = YAML.parse(fm);
       console.log(matter);
       return {
+        ...doc,
         ...matter,
         contents,
       };
