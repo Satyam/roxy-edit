@@ -62,7 +62,7 @@ export function Editor(props) {
               type="date"
               class="text-input"
               title="Fecha de publicación"
-              value={doc.date ?? today}
+              value={doc.date?.split('T')[0] ?? today}
             />
             <div class="error"></div>
           </label>
