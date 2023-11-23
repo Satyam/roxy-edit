@@ -3,6 +3,7 @@ import { unwrap } from 'solid-js/store';
 import useSiteInfo from './useSiteInfo';
 import useDocData from './useDocData';
 import { activeTabSignal, TABS } from './activeTab';
+import './ListPosts.css';
 
 export const sortDescending = (a, b) => b[0] - a[0];
 
