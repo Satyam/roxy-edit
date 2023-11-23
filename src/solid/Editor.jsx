@@ -6,43 +6,30 @@ import useDocData from './useDocData';
 import useSiteInfo from './useSiteInfo';
 import SplitSelList from './SplitSelList';
 import { today } from './utils';
+import useForm from './useForm';
 
 import './Editor.css';
-const [values, setValues] = createStore({});
-const [errors, setErrors] = createStore({});
 
-function checkValid({ element, validators = [] }, setErrors, errorClass) {
-  return async () => {
-    element.setCustomValidity('');
-    element.checkValidity();
-    let message = element.validationMessage;
-    if (!message) {
-      for (const validator of validators) {
-        const text = await validator(element);
-        if (text) {
-          element.setCustomValidity(text);
-          break;
-        }
-      }
-      message = element.validationMessage;
-    }
-    if (message) {
-      errorClass && element.classList.toggle(errorClass, true);
-      setErrors({ [element.name]: message });
-    }
-  };
-}
+const ErrorMessage = (props) => (
+  <Show when={props.error}>
+    <span class="error-message">{props.error}</span>
+  </Show>
+);
 
-export function Editor(props) {
+export function Editor() {
   const { doc, readStatus } = useDocData;
   const { info } = useSiteInfo;
-
+  const { validate, formSubmit, errors } = useForm({
+    errorClass: 'error-input',
+  });
   console.log(doc);
-  // return <pre>{JSON.stringify(doc, null, 2)}</pre>;
 
+  const fn = (values, submitter) => {
+    console.log('submit', submitter.name, values);
+  };
   return (
     <Show when={!readStatus.loading} fallback={<div>Leyendo ....</div>}>
-      <form id="form" novalidate>
+      <form id="form" use:formSubmit={fn}>
         <div>
           <label>
             Título
@@ -51,9 +38,11 @@ export function Editor(props) {
               class="text-input wide"
               title="Título de la página o post"
               tabindex="1"
+              required
               value={doc.title}
+              use:validate
             />
-            <div class="error"></div>
+            <ErrorMessage error={errors.title} />
           </label>
           <label>
             Fecha
@@ -63,16 +52,19 @@ export function Editor(props) {
               class="text-input"
               title="Fecha de publicación"
               value={doc.date?.split('T')[0] ?? today}
+              use:validate
             />
-            <div class="error"></div>
+            <ErrorMessage error={errors.date} />
           </label>
           <Show when={doc.isPost}>
             <SplitSelList
+              name="cats"
               title="Categorías"
               items={info.categories}
               selected={doc.categories}
             ></SplitSelList>
             <SplitSelList
+              name="tags"
               title="Etiquetas"
               items={info.tags}
               selected={doc.tags}
@@ -86,8 +78,9 @@ export function Editor(props) {
                 title="Ingresa o selecciona el nombre del autor"
                 list="authorDatalist"
                 value={doc.author}
+                use:validate
               />
-              <div class="error"></div>
+              <ErrorMessage error={errors.author} />
             </label>
             <datalist id="authorDatalist">
               <For each={info.authors}>{(item) => <option value={item} />}</For>
