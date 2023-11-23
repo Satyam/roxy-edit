@@ -57,6 +57,14 @@ const SplitSelList = (args) => {
       </div>
       <fieldset>
         <legend>Seleccionadas:</legend>
+        <select multiple hidden name={props.name}>
+          <Show when={newItem()}>
+            <option value={newItem()} selected />
+          </Show>
+          <For each={selected()}>
+            {(item) => <option value={item} selected />}
+          </For>
+        </select>
         <ul
           class="selectedItems"
           title="Puedes clicar en los items para eliminarlos"
