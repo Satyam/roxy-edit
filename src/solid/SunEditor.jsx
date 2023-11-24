@@ -136,6 +136,7 @@ export function SunEditor(props) {
       console.log('onChange');
       const changed = newContents !== contents();
       if (changed) {
+        _editor.save();
         _setContents(newContents);
         setChanged(true);
       }
@@ -153,7 +154,12 @@ export function SunEditor(props) {
   return (
     <>
       <canvas class="canvas" ref={canvas} width="800" height="600"></canvas>
-      <textarea ref={area}></textarea>
+      <textarea
+        ref={area}
+        data-name={props.name}
+        data-value
+        data-in-value
+      ></textarea>
     </>
   );
 }
