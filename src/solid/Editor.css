@@ -3,18 +3,14 @@
   grid-template-columns: 3fr 1fr;
   gap: 20px;
 
-  .error {
-    visibility: hidden;
-    font-size: x-small;
+  .error-message {
+    font-size: small;
     color: red;
     margin-left: 2rem;
   }
 
-  .invalid .error {
-    visibility: visible;
-  }
-  .invalid input {
-    border-color: red;
+  .error-input {
+    border: solid thin red;
   }
 
   :is(label) {
