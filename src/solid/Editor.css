@@ -1,8 +1,9 @@
 #form {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 20px;
-
+  .form-top {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+  }
   .error-message {
     font-size: small;
     color: red;

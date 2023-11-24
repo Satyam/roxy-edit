@@ -30,108 +30,112 @@ export function Editor() {
   return (
     <Show when={!readStatus.loading} fallback={<div>Leyendo ....</div>}>
       <form id="form" use:formSubmit={fn}>
-        <div>
-          <label>
-            Título
-            <input
-              name="title"
-              class="text-input wide"
-              title="Título de la página o post"
-              tabindex="1"
-              required
-              value={doc.title}
-              use:validate
-            />
-            <ErrorMessage error={errors.title} />
-          </label>
-          <label>
-            Fecha
-            <input
-              name="date"
-              type="date"
-              class="text-input"
-              title="Fecha de publicación"
-              value={doc.date?.split('T')[0] ?? today}
-              use:validate
-            />
-            <ErrorMessage error={errors.date} />
-          </label>
-          <Show when={doc.isPost}>
-            <SplitSelList
-              name="cats"
-              title="Categorías"
-              items={info.categories}
-              selected={doc.categories}
-            ></SplitSelList>
-            <SplitSelList
-              name="tags"
-              title="Etiquetas"
-              items={info.tags}
-              selected={doc.tags}
-            ></SplitSelList>
-
+        <div class="form-top">
+          <div>
             <label>
-              Autor
+              Título
               <input
-                name="author"
+                name="title"
                 class="text-input wide"
-                title="Ingresa o selecciona el nombre del autor"
-                list="authorDatalist"
-                value={doc.author}
+                title="Título de la página o post"
+                tabindex="1"
+                required
+                value={doc.title}
                 use:validate
               />
-              <ErrorMessage error={errors.author} />
+              <ErrorMessage error={errors.title} />
             </label>
-            <datalist id="authorDatalist">
-              <For each={info.authors}>{(item) => <option value={item} />}</For>
-            </datalist>
-          </Show>
-        </div>
-        <div>
-          <fieldset>
-            <legend>Original</legend>
-            <button
-              name="publish"
-              type="submit"
-              title="Guarda este borrador como original para publicar"
-            >
-              <Icon>save</Icon>
-              Guardar
+            <label>
+              Fecha
+              <input
+                name="date"
+                type="date"
+                class="text-input"
+                title="Fecha de publicación"
+                value={doc.date?.split('T')[0] ?? today}
+                use:validate
+              />
+              <ErrorMessage error={errors.date} />
+            </label>
+            <Show when={doc.isPost}>
+              <SplitSelList
+                name="cats"
+                title="Categorías"
+                items={info.categories}
+                selected={doc.categories}
+              ></SplitSelList>
+              <SplitSelList
+                name="tags"
+                title="Etiquetas"
+                items={info.tags}
+                selected={doc.tags}
+              ></SplitSelList>
+
+              <label>
+                Autor
+                <input
+                  name="author"
+                  class="text-input wide"
+                  title="Ingresa o selecciona el nombre del autor"
+                  list="authorDatalist"
+                  value={doc.author}
+                  use:validate
+                />
+                <ErrorMessage error={errors.author} />
+              </label>
+              <datalist id="authorDatalist">
+                <For each={info.authors}>
+                  {(item) => <option value={item} />}
+                </For>
+              </datalist>
+            </Show>
+          </div>
+          <div>
+            <fieldset>
+              <legend>Original</legend>
+              <button
+                name="publish"
+                type="submit"
+                title="Guarda este borrador como original para publicar"
+              >
+                <Icon>save</Icon>
+                Guardar
+              </button>
+              <button
+                name="remove"
+                type="submit"
+                class="warning"
+                title="Borra este borrador y el original"
+              >
+                <Icon>delete</Icon>
+                Borrar
+              </button>
+            </fieldset>
+            <fieldset>
+              <legend>Borrador</legend>
+              <button
+                name="save"
+                type="submit"
+                title="Guarda el borrador sin afectar el original"
+              >
+                <Icon>save</Icon>
+                Guardar
+              </button>
+              <button
+                name="discard"
+                type="submit"
+                class="warning"
+                title="Descarta este borrador sin afectar el original"
+              >
+                <Icon>delete</Icon>
+                Descartar
+              </button>
+            </fieldset>
+            <button type="reset" title="Vuelve a la selección de archivos">
+              <Icon>back</Icon>
+              Volver
             </button>
-            <button
-              name="remove"
-              type="submit"
-              class="warning"
-              title="Borra este borrador y el original"
-            >
-              <Icon>delete</Icon>
-              Borrar
-            </button>
-          </fieldset>
-          <fieldset>
-            <legend>Borrador</legend>
-            <button
-              name="save"
-              type="submit"
-              title="Guarda el borrador sin afectar el original"
-            >
-              <Icon>save</Icon>
-              Guardar
-            </button>
-            <button
-              name="discard"
-              type="submit"
-              class="warning"
-              title="Descarta este borrador sin afectar el original"
-            >
-              <Icon>delete</Icon>
-              Descartar
-            </button>
-          </fieldset>
-          <button type="reset" title="Vuelve a la selección de archivos">
-            <Icon>back</Icon>
-            Volver
-          </button>
+          </div>
         </div>
         <SunEditor name="contents" contents={doc.contents} />
       </form>
