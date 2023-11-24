@@ -133,9 +133,8 @@ export function Editor() {
             Volver
           </button>
         </div>
+        <SunEditor name="contents" contents={doc.contents} />
       </form>
-
-      <SunEditor contents={doc.contents} />
     </Show>
   );
 }
