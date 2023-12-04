@@ -1,4 +1,4 @@
-import { Show, For } from 'solid-js';
+import { Show, For, createSignal } from 'solid-js';
 import SunEditor from './SunEditor';
 import Icon from './Icon';
 import { createStore } from 'solid-js/store';
@@ -17,15 +17,24 @@ const ErrorMessage = (props) => (
 );
 
 export function Editor() {
+  // TODO:  drop isChanged from docData.
+  // TODO: use setChanged
+  const [isChanged, setChanged] = createSignal(false);
   const { doc, readStatus } = useDocData;
   const { info } = useSiteInfo;
-  const { validate, formSubmit, errors } = useForm({
+  const { field, formSubmit, errors } = useForm({
     errorClass: 'error-input',
   });
-  console.log(doc);
 
   const fn = (values, submitter) => {
     console.log('submit', submitter.name, values);
+  };
+  const callbackHandler = (values) => {
+    console.log('callback', values);
+  };
+  const inputHandler = (ev) => {
+    const el = ev.target;
+    console.log('input', el.name, el.value);
   };
   return (
     <Show when={!readStatus.loading} fallback={<div>Leyendo ....</div>}>
@@ -41,7 +50,8 @@ export function Editor() {
                 tabindex="1"
                 required
                 value={doc.title}
-                use:validate
+                use:field
+                onInput={inputHandler}
               />
               <ErrorMessage error={errors.title} />
             </label>
@@ -53,7 +63,8 @@ export function Editor() {
                 class="text-input"
                 title="Fecha de publicación"
                 value={doc.date?.split('T')[0] ?? today}
-                use:validate
+                use:field
+                onInput={inputHandler}
               />
               <ErrorMessage error={errors.date} />
             </label>
@@ -63,12 +74,14 @@ export function Editor() {
                 title="Categorías"
                 items={info.categories}
                 selected={doc.categories}
+                callback={callbackHandler}
               ></SplitSelList>
               <SplitSelList
                 name="tags"
                 title="Etiquetas"
                 items={info.tags}
                 selected={doc.tags}
+                callback={callbackHandler}
               ></SplitSelList>
 
               <label>
@@ -79,7 +92,8 @@ export function Editor() {
                   title="Ingresa o selecciona el nombre del autor"
                   list="authorDatalist"
                   value={doc.author}
-                  use:validate
+                  use:field
+                  onInput={inputHandler}
                 />
                 <ErrorMessage error={errors.author} />
               </label>
@@ -93,10 +107,12 @@ export function Editor() {
           <div>
             <fieldset>
               <legend>Original</legend>
+              {/* //   els.publish.disabled = !fileName || isChanged; */}
               <button
                 name="publish"
                 type="submit"
                 title="Guarda este borrador como original para publicar"
+                disabled={!doc.fileName || isChanged()}
               >
                 <Icon>save</Icon>
                 Guardar
@@ -106,6 +122,7 @@ export function Editor() {
                 type="submit"
                 class="warning"
                 title="Borra este borrador y el original"
+                disabled={doc.isNew || doc.fileName === 'index.md'}
               >
                 <Icon>delete</Icon>
                 Borrar
@@ -117,6 +134,7 @@ export function Editor() {
                 name="save"
                 type="submit"
                 title="Guarda el borrador sin afectar el original"
+                disabled={!isChanged()}
               >
                 <Icon>save</Icon>
                 Guardar
@@ -126,6 +144,7 @@ export function Editor() {
                 type="submit"
                 class="warning"
                 title="Descarta este borrador sin afectar el original"
+                disabled={!doc.isDraft}
               >
                 <Icon>delete</Icon>
                 Descartar
@@ -137,7 +156,11 @@ export function Editor() {
             </button>
           </div>
         </div>
-        <SunEditor name="contents" contents={doc.contents} />
+        <SunEditor
+          name="contents"
+          contents={doc.contents}
+          onInput={inputHandler}
+        />
       </form>
     </Show>
   );
