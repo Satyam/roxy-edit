@@ -1,7 +1,6 @@
 import { Show, For, createSignal } from 'solid-js';
 import SunEditor from './SunEditor';
 import Icon from './Icon';
-import { createStore } from 'solid-js/store';
 import useDocData from './useDocData';
 import useSiteInfo from './useSiteInfo';
 import SplitSelList from './SplitSelList';
@@ -17,13 +16,11 @@ const ErrorMessage = (props) => (
 );
 
 export function Editor() {
-  // TODO:  drop isChanged from docData.
-  // TODO: use setChanged
   const [isChanged, setChanged] = createSignal(false);
   const { doc, readStatus } = useDocData;
   const { info } = useSiteInfo;
-  const { field, formSubmit, errors } = useForm({
-    errorClass: 'error-input',
+  const { formSubmit, field, values, errors } = useForm({
+    values: doc,
   });
 
   const fn = (values, submitter) => {
@@ -49,7 +46,7 @@ export function Editor() {
                 title="Título de la página o post"
                 tabindex="1"
                 required
-                value={doc.title}
+                value={values.title}
                 use:field
                 onInput={inputHandler}
               />
@@ -62,7 +59,7 @@ export function Editor() {
                 type="date"
                 class="text-input"
                 title="Fecha de publicación"
-                value={doc.date?.split('T')[0] ?? today}
+                value={values.date?.split('T')[0] ?? today}
                 use:field
                 onInput={inputHandler}
               />
@@ -73,14 +70,14 @@ export function Editor() {
                 name="cats"
                 title="Categorías"
                 items={info.categories}
-                selected={doc.categories}
+                selected={values.categories}
                 callback={callbackHandler}
               ></SplitSelList>
               <SplitSelList
                 name="tags"
                 title="Etiquetas"
                 items={info.tags}
-                selected={doc.tags}
+                selected={values.tags}
                 callback={callbackHandler}
               ></SplitSelList>
 
@@ -91,7 +88,7 @@ export function Editor() {
                   class="text-input wide"
                   title="Ingresa o selecciona el nombre del autor"
                   list="authorDatalist"
-                  value={doc.author}
+                  value={values.author}
                   use:field
                   onInput={inputHandler}
                 />
@@ -158,7 +155,7 @@ export function Editor() {
         </div>
         <SunEditor
           name="contents"
-          contents={doc.contents}
+          contents={values.contents}
           onInput={inputHandler}
         />
       </form>

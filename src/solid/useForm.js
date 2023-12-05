@@ -1,8 +1,8 @@
 import { createStore, unwrap } from 'solid-js/store';
 import { getValueFromEl } from './inputValues';
 
-export function useForm({ errorClass }) {
-  const [values, setValues] = createStore({});
+export function useForm({ values: _values = {}, errorClass = 'error-input' }) {
+  const [values, setValues] = createStore(_values);
   const [errors, setErrors] = createStore({});
   const [touched, setTouched] = createStore({});
   const fieldsConfig = {};
