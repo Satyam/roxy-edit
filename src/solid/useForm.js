@@ -1,12 +1,10 @@
-import { createStore, produce } from 'solid-js/store';
+import { createStore, unwrap } from 'solid-js/store';
 import { getValueFromEl } from './inputValues';
 
 export function useForm({ errorClass }) {
-  const [fields, setFields] = createStore({
-    touched: {},
-    values: {},
-    errors: {},
-  });
+  const [values, setValues] = createStore({});
+  const [errors, setErrors] = createStore({});
+  const [touched, setTouched] = createStore({});
   const fieldsConfig = {};
 
   const checkValid = (name) => {
@@ -27,7 +25,7 @@ export function useForm({ errorClass }) {
       }
       if (message) {
         errorClass && element.classList.toggle(errorClass, true);
-        setFields('errors', name, message);
+        setErrors(name, message);
       }
     };
   };
@@ -45,24 +43,16 @@ export function useForm({ errorClass }) {
           : [validators],
     };
     setTimeout(() => {
-      setFields(
-        produce((f) => {
-          f.errors[name] = undefined;
-          f.touched[name] = false;
-          f.values[name] = getValueFromEl(fieldEl);
-        })
-      );
+      setErrors(name, undefined);
+      setTouched(name, false);
+      setValues(name, getValueFromEl(fieldEl));
     }, 0);
     fieldEl.onblur = (ev) => checkValid(ev.target.name);
     fieldEl.oninput = (ev) => {
       const name = ev.target.name;
-      setFields(
-        produce((f) => {
-          f.errors[name] = undefined;
-          f.touched[name] = true;
-          f.values[name] = getValueFromEl(fieldsConfig[name].element);
-        })
-      );
+      setErrors(name, undefined);
+      setTouched(name, true);
+      setValues(name, getValueFromEl(fieldsConfig[name].element));
       errorClass && fieldEl.classList.toggle(errorClass, false);
     };
   };
@@ -82,7 +72,7 @@ export function useForm({ errorClass }) {
         }
       }
       if (!errored) {
-        submitHandler(fields.values, ev.submitter, formEl);
+        submitHandler(unwrap(values), ev.submitter, formEl);
       }
     };
   };
@@ -90,9 +80,9 @@ export function useForm({ errorClass }) {
   return {
     field,
     formSubmit,
-    errors: fields.errors,
-    values: fields.values,
-    touched: fields.touched,
+    errors,
+    values,
+    touched,
   };
 }
 
