@@ -25,9 +25,9 @@ export function ListPages() {
       }))
   );
 
-  const clickHandler = ({ file, title }, ev) => {
+  const clickHandler = ({ file }, ev) => {
     ev.preventDefault();
-    readDoc({ fileName: file, title, isPost: false });
+    readDoc({ fileName: file, isPost: false });
     setActiveTab(TABS.EDITOR);
   };
 

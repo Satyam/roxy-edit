@@ -17,7 +17,7 @@ const ErrorMessage = (props) => (
 
 export function Editor() {
   const [isChanged, setChanged] = createSignal(false);
-  const { doc, readStatus } = useDocData;
+  const { doc, docInfo, readStatus } = useDocData;
   const { info } = useSiteInfo;
   const { formSubmit, field, values, errors } = useForm({
     values: doc,
@@ -65,7 +65,7 @@ export function Editor() {
               />
               <ErrorMessage error={errors.date} />
             </label>
-            <Show when={doc.isPost}>
+            <Show when={docInfo.isPost}>
               <SplitSelList
                 name="cats"
                 title="Categorías"
@@ -109,7 +109,7 @@ export function Editor() {
                 name="publish"
                 type="submit"
                 title="Guarda este borrador como original para publicar"
-                disabled={!doc.fileName || isChanged()}
+                disabled={!docInfo.fileName || isChanged()}
               >
                 <Icon>save</Icon>
                 Guardar
@@ -119,7 +119,7 @@ export function Editor() {
                 type="submit"
                 class="warning"
                 title="Borra este borrador y el original"
-                disabled={doc.isNew || doc.fileName === 'index.md'}
+                disabled={docInfo.isNew || docInfo.fileName === 'index.md'}
               >
                 <Icon>delete</Icon>
                 Borrar
@@ -141,7 +141,7 @@ export function Editor() {
                 type="submit"
                 class="warning"
                 title="Descarta este borrador sin afectar el original"
-                disabled={!doc.isDraft}
+                disabled={!docInfo.isDraft}
               >
                 <Icon>delete</Icon>
                 Descartar

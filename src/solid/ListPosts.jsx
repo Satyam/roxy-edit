@@ -28,9 +28,9 @@ export function ListPosts() {
     return tNode;
   });
 
-  const clickHandler = ({ file, title }, ev) => {
+  const clickHandler = ({ file }, ev) => {
     ev.preventDefault();
-    readDoc({ fileName: file, title, isPost: true });
+    readDoc({ fileName: file, isPost: true });
     setActiveTab(TABS.EDITOR);
   };
 

@@ -5,13 +5,15 @@ import YAML from 'yaml';
 import { deleteFile, fetchText, sendText } from '../fetch';
 import { ROUTES } from '../common';
 
-const defaultValues = {
+const defaultDoc = {
   title: '',
   date: today,
   categories: [],
   tags: [],
   author: 'Roxana Cabut',
   contents: '',
+};
+const defaultDocInfo = {
   fileName: null,
   isPost: false,
   isDraft: false,
@@ -22,15 +24,22 @@ const defaultValues = {
 const sepRx = /^---\n(?<fm>.*)\n---\s*(?<contents>.*)$/s;
 
 export default createRoot(() => {
-  const [doc, setDoc] = createStore(defaultValues);
-  const resetDoc = (overrides) => setDoc({ ...defaultValues, ...overrides });
+  const [doc, setDoc] = createStore(defaultDoc);
+  const [docInfo, setDocInfo] = createStore(defaultDocInfo);
+  const resetStatus = (overrides) =>
+    setDocInfo({ ...defaultDocInfo, ...overrides });
 
   const url = (draft) =>
-    join(ROUTES.FILES, !!(draft ?? doc.isDraft), !!doc.isPost, doc.fileName);
+    join(
+      ROUTES.FILES,
+      !!(draft ?? docInfo.isDraft),
+      !!docInfo.isPost,
+      docInfo.fileName
+    );
 
   const readMd = async (_, { refetching }) => {
     if (typeof refetching === 'object') {
-      resetDoc(refetching);
+      resetStatus(refetching);
       const md = await fetchText(url());
       const m = md.match(sepRx);
       if (!m) return m;
@@ -43,11 +52,11 @@ export default createRoot(() => {
         contents,
       };
     }
-    return defaultValues;
+    return defaultDoc;
   };
 
   const [readStatus, { refetch: readDoc }] = createResource(readMd, {
-    initialValue: defaultValues,
+    initialValue: defaultDoc,
   });
 
   createEffect(() => {
@@ -64,6 +73,7 @@ export default createRoot(() => {
           // Leave no blank spaces to the left of this template string:
           `---
 ${YAML.stringify({
+  layout: docInfo.isPost ? 'post' : 'page',
   title: doc.title,
   date: doc.date,
   categories: doc.categories,
@@ -79,19 +89,19 @@ ${doc.contents}`
   const [removeStatus, { refetch: removeDoc }] = createResource(
     async (_, { refetching }) => {
       if (refetching) {
-        if (doc.isDraft) await deleteFile(url(true));
+        if (docInfo.isDraft) await deleteFile(url(true));
         if (refetching === 'both') {
           await deleteFile(url(false));
         }
-        resetDoc();
+        setDocInfo(defaultDocInfo);
+        setDoc(defaultDoc);
       }
     }
   );
 
   return {
     doc,
-    setDoc,
-    resetDoc,
+    docInfo,
     readDoc,
     readStatus,
     saveDoc,
