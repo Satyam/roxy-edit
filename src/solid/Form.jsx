@@ -1,4 +1,4 @@
-import { splitProps, mergeProps } from 'solid-js';
+import { splitProps, mergeProps, createMemo } from 'solid-js';
 import { createStore, unwrap } from 'solid-js/store';
 import { getValueFromEl } from './inputValues';
 
@@ -19,6 +19,13 @@ export function Form(props) {
   const [values, setValues] = createStore(local.values);
   const [errors, setErrors] = createStore({});
   const [touched, setTouched] = createStore({});
+
+  const anyTouched = createMemo(() =>
+    Object.values(touched).some((isTouched) => isTouched)
+  );
+  const anyError = createMemo(() =>
+    Object.values(errors).some((msg) => msg.length > 0)
+  );
   let formEl;
 
   const checkValid = async (fieldEl) => {
@@ -88,7 +95,7 @@ export function Form(props) {
       ref={formEl}
     >
       {typeof local.children == 'function'
-        ? local.children({ values, errors, touched })
+        ? local.children({ values, errors, touched, anyError, anyTouched })
         : local.children}
     </form>
   );

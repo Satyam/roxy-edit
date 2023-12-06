@@ -1,4 +1,4 @@
-import { Show, For, createSignal } from 'solid-js';
+import { Show, For } from 'solid-js';
 import SunEditor from './SunEditor';
 import Icon from './Icon';
 import useDocData from './useDocData';
@@ -15,7 +15,6 @@ const ErrorMessage = (props) => (
 );
 
 export function Editor() {
-  const [isChanged, setChanged] = createSignal(false);
   const { doc, docInfo, readStatus } = useDocData;
   const { info } = useSiteInfo;
 
@@ -29,7 +28,7 @@ export function Editor() {
   return (
     <Show when={!readStatus.loading} fallback={<div>Leyendo ....</div>}>
       <Form id="form" values={doc} submitHandler={fn}>
-        {({ values, errors }) => (
+        {({ values, errors, anyTouched }) => (
           <>
             <div class="form-top">
               <div>
@@ -93,12 +92,11 @@ export function Editor() {
               <div>
                 <fieldset>
                   <legend>Original</legend>
-                  {/* //   els.publish.disabled = !fileName || isChanged; */}
                   <button
                     name="publish"
                     type="submit"
                     title="Guarda este borrador como original para publicar"
-                    disabled={!docInfo.fileName || isChanged()}
+                    disabled={!docInfo.fileName || anyTouched()}
                   >
                     <Icon>save</Icon>
                     Guardar
@@ -120,7 +118,7 @@ export function Editor() {
                     name="save"
                     type="submit"
                     title="Guarda el borrador sin afectar el original"
-                    disabled={!isChanged()}
+                    disabled={!anyTouched()}
                   >
                     <Icon>save</Icon>
                     Guardar
