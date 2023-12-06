@@ -9,6 +9,7 @@ const defaultProps = {
   submitHandler: () => {},
   validators: {},
 };
+
 export function Form(props) {
   const [local, formAttrs] = splitProps(mergeProps(defaultProps, props), [
     'values',
@@ -16,15 +17,24 @@ export function Form(props) {
     'children',
     'validators',
   ]);
+  let anyTouched, anyError;
   const [values, setValues] = createStore(local.values);
-  const [errors, setErrors] = createStore({});
-  const [touched, setTouched] = createStore({});
+  const [errors, setErrors] = createStore({
+    get $any() {
+      return anyError?.();
+    },
+  });
+  const [touched, setTouched] = createStore({
+    get $any() {
+      return anyTouched?.();
+    },
+  });
 
-  const anyTouched = createMemo(() =>
+  anyTouched = createMemo(() =>
     Object.values(touched).some((isTouched) => isTouched)
   );
-  const anyError = createMemo(() =>
-    Object.values(errors).some((msg) => msg.length > 0)
+  anyError = createMemo(() =>
+    Object.values(errors).some((msg) => msg?.length > 0)
   );
   let formEl;
 
@@ -95,7 +105,7 @@ export function Form(props) {
       ref={formEl}
     >
       {typeof local.children == 'function'
-        ? local.children({ values, errors, touched, anyError, anyTouched })
+        ? local.children({ values, errors, touched })
         : local.children}
     </form>
   );

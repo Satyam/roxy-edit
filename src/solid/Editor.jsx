@@ -28,7 +28,7 @@ export function Editor() {
   return (
     <Show when={!readStatus.loading} fallback={<div>Leyendo ....</div>}>
       <Form id="form" values={doc} submitHandler={fn}>
-        {({ values, errors, anyTouched }) => (
+        {({ values, errors, touched }) => (
           <>
             <div class="form-top">
               <div>
@@ -96,7 +96,7 @@ export function Editor() {
                     name="publish"
                     type="submit"
                     title="Guarda este borrador como original para publicar"
-                    disabled={!docInfo.fileName || anyTouched()}
+                    disabled={!docInfo.fileName || touched.$any}
                   >
                     <Icon>save</Icon>
                     Guardar
@@ -118,7 +118,7 @@ export function Editor() {
                     name="save"
                     type="submit"
                     title="Guarda el borrador sin afectar el original"
-                    disabled={!anyTouched()}
+                    disabled={!touched.$any}
                   >
                     <Icon>save</Icon>
                     Guardar
