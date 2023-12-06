@@ -1,11 +1,16 @@
-import { splitProps } from 'solid-js';
+import { splitProps, mergeProps } from 'solid-js';
 import { createStore, unwrap } from 'solid-js/store';
 import { getValueFromEl } from './inputValues';
 
 export const ERROR_CLASS = 'error-input';
 
+const defaultProps = {
+  values: {},
+  submitHandler: () => {},
+  validators: {},
+};
 export function Form(props) {
-  const [local, formAttrs] = splitProps(props, [
+  const [local, formAttrs] = splitProps(mergeProps(defaultProps, props), [
     'values',
     'submitHandler',
     'children',
@@ -18,11 +23,16 @@ export function Form(props) {
 
   const checkValid = async (fieldEl) => {
     if (!fieldEl) return;
+    const name = fieldEl.name;
+    if (!name) return;
     fieldEl.setCustomValidity('');
     fieldEl.checkValidity();
     let message = fieldEl.validationMessage;
-    if (!message) {
-      for (const validator of local.validators?.[fieldEl.name] || []) {
+    if (!message && name in local.validators) {
+      const validators = local.validators[name];
+      for (const validator of Array.isArray(validators)
+        ? validators
+        : [validators]) {
         const text = await validator(fieldEl);
         if (text) {
           fieldEl.setCustomValidity(text);
@@ -50,7 +60,7 @@ export function Form(props) {
         errored = true;
       }
     }
-    if (!errored && local.submitHandler) {
+    if (!errored) {
       local.submitHandler(unwrap(values), ev.submitter);
     }
   };
