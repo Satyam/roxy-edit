@@ -72,14 +72,22 @@ export default createRoot(() => {
           url(),
           // Leave no blank spaces to the left of this template string:
           `---
-${YAML.stringify({
-  layout: docInfo.isPost ? 'post' : 'page',
-  title: doc.title,
-  date: doc.date,
-  categories: doc.categories,
-  tags: doc.tags,
-  author: doc.author,
-})}
+${YAML.stringify(
+  docInfo.isPost
+    ? {
+        layout: 'post',
+        title: doc.title,
+        date: doc.date,
+        categories: doc.categories,
+        tags: doc.tags,
+        author: doc.author,
+      }
+    : {
+        layout: 'page',
+        title: doc.title,
+        date: doc.date,
+      }
+)}
 ---
 ${doc.contents}`
         );
