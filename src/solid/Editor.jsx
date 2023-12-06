@@ -5,13 +5,12 @@ import useDocData from './useDocData';
 import useSiteInfo from './useSiteInfo';
 import SplitSelList from './SplitSelList';
 import { today } from './utils';
-// import useForm from './useForm';
-import { Form, ERROR_CLASS } from './Form';
+import Form from './Form';
 import './Editor.css';
 
 const ErrorMessage = (props) => (
   <Show when={props.error}>
-    <span class={ERROR_CLASS}>{props.error}</span>
+    <span class="error-message">{props.error}</span>
   </Show>
 );
 
@@ -26,10 +25,7 @@ export function Editor() {
   const callbackHandler = (values) => {
     console.log('callback', values);
   };
-  const inputHandler = (ev) => {
-    const el = ev.target;
-    console.log('input', el.name, el.value);
-  };
+
   return (
     <Show when={!readStatus.loading} fallback={<div>Leyendo ....</div>}>
       <Form id="form" values={doc} submitHandler={fn}>
@@ -46,7 +42,6 @@ export function Editor() {
                     tabindex="1"
                     required
                     value={values.title}
-                    onInput={inputHandler}
                   />
                   <ErrorMessage error={errors.title} />
                 </label>
@@ -58,7 +53,6 @@ export function Editor() {
                     class="text-input"
                     title="Fecha de publicación"
                     value={values.date?.split('T')[0] ?? today}
-                    onInput={inputHandler}
                   />
                   <ErrorMessage error={errors.date} />
                 </label>
@@ -86,7 +80,6 @@ export function Editor() {
                       title="Ingresa o selecciona el nombre del autor"
                       list="authorDatalist"
                       value={values.author}
-                      onInput={inputHandler}
                     />
                     <ErrorMessage error={errors.author} />
                   </label>
@@ -149,11 +142,7 @@ export function Editor() {
                 </button>
               </div>
             </div>
-            <SunEditor
-              name="contents"
-              contents={values.contents}
-              onInput={inputHandler}
-            />
+            <SunEditor name="contents" contents={values.contents} />
           </>
         )}
       </Form>
