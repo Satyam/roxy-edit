@@ -105,7 +105,14 @@ export function Form(props) {
       ref={formEl}
     >
       {typeof local.children == 'function'
-        ? local.children({ values, errors, touched })
+        ? local.children({
+            values,
+            errors,
+            touched,
+            setValues,
+            setErrors,
+            setTouched,
+          })
         : local.children}
     </form>
   );
