@@ -142,7 +142,7 @@ export function Editor() {
                   </button>
                 </div>
               </div>
-              <SunEditor name="contents" contents={values.contents} />
+              <SunEditor name="contents" form={form} />
             </>
           );
         }}

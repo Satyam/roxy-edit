@@ -4,66 +4,68 @@ import es from 'suneditor/src/lang/es';
 import { ROUTES } from '../common';
 import { join } from './utils';
 import { plugin_dialog } from '../client/linkDialog';
-import { onMount, onCleanup, createSignal } from 'solid-js';
+import { onMount, onCleanup } from 'solid-js';
 import './SunEditor.css';
 
-const [contents, _setContents] = createSignal();
-const [changed, setChanged] = createSignal();
+// const [contents, _setContents] = createSignal();
+// const [changed, setChanged] = createSignal();
 
+// let _editor;
+// document.querySelectorAll('div.satyam-sun-editor img')
+// data-file-name=\"20220511_150826.jpg\"
 let canvas;
-let _editor;
+// export const useEditor = () => {
+//   const acceptChanges = () => {
+//     setChanged(false);
+//   };
+//   const setContents = (contents) => {
+//     _editor.setContents(contents);
+//     acceptChanges();
+//   };
 
-export const useEditor = () => {
-  const acceptChanges = () => {
-    setChanged(false);
-  };
-  const setContents = (contents) => {
-    _editor.setContents(contents);
-    acceptChanges();
-  };
+//   const replaceImages = async () => {
+//     const ctx = canvas.getContext('2d');
+//     const images = _editor.getImagesInfo();
+//     let anyChanges = false;
 
-  const replaceImages = async () => {
-    const ctx = canvas.getContext('2d');
-    const images = _editor.getImagesInfo();
-    let anyChanges = false;
+//     for (const img of images) {
+//       const imgEl = img.element;
+//       if (!img.src.startsWith('data:')) continue;
+//       anyChanges = true;
+//       const w = 800;
+//       const h = Math.ceil(800 * (imgEl.naturalHeight / imgEl.naturalWidth));
+//       canvas.width = w;
+//       canvas.height = h;
+//       ctx.drawImage(imgEl, 0, 0, w, h);
+//       const response = await fetch(join(ROUTES.IMAGES, img.name), {
+//         method: 'POST',
+//         body: canvas.toDataURL(),
+//       });
+//       if (response.ok) {
+//         imgEl.src = join(ROUTES.IMAGES, await response.text());
+//         imgEl.setAttribute('origin-size', `${w},${h}`);
+//       } else {
+//         console.error('response not ok');
+//       }
+//     }
+//     if (anyChanges) _setContents(_editor.getContents());
+//   };
 
-    for (const img of images) {
-      const imgEl = img.element;
-      if (!img.src.startsWith('data:')) continue;
-      anyChanges = true;
-      const w = 800;
-      const h = Math.ceil(800 * (imgEl.naturalHeight / imgEl.naturalWidth));
-      canvas.width = w;
-      canvas.height = h;
-      ctx.drawImage(imgEl, 0, 0, w, h);
-      const response = await fetch(join(ROUTES.IMAGES, img.name), {
-        method: 'POST',
-        body: canvas.toDataURL(),
-      });
-      if (response.ok) {
-        imgEl.src = join(ROUTES.IMAGES, await response.text());
-        imgEl.setAttribute('origin-size', `${w},${h}`);
-      } else {
-        console.error('response not ok');
-      }
-    }
-    if (anyChanges) _setContents(_editor.getContents());
-  };
-
-  return {
-    contents,
-    changed,
-    acceptChanges,
-    setContents,
-    replaceImages,
-  };
-};
+//   return {
+//     contents,
+//     changed,
+//     acceptChanges,
+//     setContents,
+//     replaceImages,
+//   };
+// };
 
 export function SunEditor(props) {
   let area;
+  let _editor;
   onMount(() => {
-    console.log('onmount');
     _editor = suneditor.create(area, {
+      className: 'satyam-sun-editor',
       height: '300',
       width: '100%',
       defaultTag: '',
@@ -134,17 +136,12 @@ export function SunEditor(props) {
 
     _editor.onChange = (newContents) => {
       console.log('onChange');
-      const changed = newContents !== contents();
-      if (changed) {
-        _editor.save();
-        _setContents(newContents);
-        setChanged(true);
-      }
+      props.form.setValues(props.name, newContents);
+      props.form.setErrors(props.name, false);
+      props.form.setTouched(props.name, true);
     };
 
-    if (props.contents) {
-      _editor.setContents(props.contents);
-    }
+    _editor.setContents(props.form.values[props.name]);
   });
 
   onCleanup(() => {
@@ -154,12 +151,7 @@ export function SunEditor(props) {
   return (
     <>
       <canvas class="canvas" ref={canvas} width="800" height="600"></canvas>
-      <textarea
-        ref={area}
-        data-name={props.name}
-        data-value
-        data-in-value
-      ></textarea>
+      <textarea ref={area}></textarea>
     </>
   );
 }
