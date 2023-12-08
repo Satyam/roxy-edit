@@ -4,17 +4,24 @@ const SplitSelList = (args) => {
   const props = mergeProps(
     {
       items: [],
-      selected: [],
       title: 'Items',
-      callback: () => {},
     },
     args
   );
-  const [selected, setSelected] = createSignal(props.selected);
+  const [selected, setSelected] = createSignal(
+    props.form.values[props.name] ?? []
+  );
   const [newItem, setNewItem] = createSignal();
 
   createEffect(() => {
-    props.callback(newItem() ? [...selected(), newItem()].sort() : selected());
+    const name = props.name;
+    const form = props.form;
+    form.setValues(
+      name,
+      newItem() ? [...selected(), newItem()].sort() : selected()
+    );
+    form.setTouched(name, true);
+    form.setErrors(name, false);
   });
 
   const removeItem = (item) => {
@@ -60,19 +67,12 @@ const SplitSelList = (args) => {
         <ul
           class="selectedItems"
           title="Puedes clicar en los items para eliminarlos"
-          data-name={props.name}
         >
           <Show when={newItem()}>
-            <li data-value={newItem()} onClick={() => setNewItem()}>
-              {newItem()}
-            </li>
+            <li onClick={() => setNewItem()}>{newItem()}</li>
           </Show>
           <For each={selected()}>
-            {(item) => (
-              <li data-value={item} onClick={[removeItem, item]}>
-                {item}
-              </li>
-            )}
+            {(item) => <li onClick={[removeItem, item]}>{item}</li>}
           </For>
         </ul>
       </fieldset>
