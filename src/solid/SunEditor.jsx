@@ -7,65 +7,13 @@ import { plugin_dialog } from '../client/linkDialog';
 import { onMount, onCleanup } from 'solid-js';
 import './SunEditor.css';
 
-// const [contents, _setContents] = createSignal();
-// const [changed, setChanged] = createSignal();
-
-// let _editor;
-// document.querySelectorAll('div.satyam-sun-editor img')
-// data-file-name=\"20220511_150826.jpg\"
 let canvas;
-// export const useEditor = () => {
-//   const acceptChanges = () => {
-//     setChanged(false);
-//   };
-//   const setContents = (contents) => {
-//     _editor.setContents(contents);
-//     acceptChanges();
-//   };
-
-//   const replaceImages = async () => {
-//     const ctx = canvas.getContext('2d');
-//     const images = _editor.getImagesInfo();
-//     let anyChanges = false;
-
-//     for (const img of images) {
-//       const imgEl = img.element;
-//       if (!img.src.startsWith('data:')) continue;
-//       anyChanges = true;
-//       const w = 800;
-//       const h = Math.ceil(800 * (imgEl.naturalHeight / imgEl.naturalWidth));
-//       canvas.width = w;
-//       canvas.height = h;
-//       ctx.drawImage(imgEl, 0, 0, w, h);
-//       const response = await fetch(join(ROUTES.IMAGES, img.name), {
-//         method: 'POST',
-//         body: canvas.toDataURL(),
-//       });
-//       if (response.ok) {
-//         imgEl.src = join(ROUTES.IMAGES, await response.text());
-//         imgEl.setAttribute('origin-size', `${w},${h}`);
-//       } else {
-//         console.error('response not ok');
-//       }
-//     }
-//     if (anyChanges) _setContents(_editor.getContents());
-//   };
-
-//   return {
-//     contents,
-//     changed,
-//     acceptChanges,
-//     setContents,
-//     replaceImages,
-//   };
-// };
 
 export function SunEditor(props) {
   let area;
   let _editor;
   onMount(() => {
     _editor = suneditor.create(area, {
-      className: 'satyam-sun-editor',
       height: '300',
       width: '100%',
       defaultTag: '',
@@ -135,13 +83,49 @@ export function SunEditor(props) {
     });
 
     _editor.onChange = (newContents) => {
-      console.log('onChange');
-      props.form.setValues(props.name, newContents);
-      props.form.setErrors(props.name, false);
-      props.form.setTouched(props.name, true);
+      const { setValues, setErrors, setTouched } = props.form;
+      setValues(props.name, newContents);
+      setErrors(props.name, false);
+      setTouched(props.name, true);
     };
 
     _editor.setContents(props.form.values[props.name]);
+
+    const replaceImages = async () => {
+      const ctx = canvas.getContext('2d');
+      const images = _editor.getImagesInfo();
+      let anyChanges = false;
+
+      for (const img of images) {
+        const imgEl = img.element;
+        if (!img.src.startsWith('data:')) continue;
+        anyChanges = true;
+        const w = 800;
+        const h = Math.ceil(800 * (imgEl.naturalHeight / imgEl.naturalWidth));
+        canvas.width = w;
+        canvas.height = h;
+        ctx.drawImage(imgEl, 0, 0, w, h);
+        const response = await fetch(join(ROUTES.IMAGES, img.name), {
+          method: 'POST',
+          body: canvas.toDataURL(),
+        });
+        if (response.ok) {
+          imgEl.src = join(ROUTES.IMAGES, await response.text());
+          imgEl.setAttribute('origin-size', `${w},${h}`);
+        } else {
+          console.error('response not ok');
+          props.form.setErrors(
+            props.name,
+            `${response.statusText} on:
+          ${response.url}`
+          );
+          throw new Error(response.statusText);
+        }
+      }
+      if (anyChanges) props.form.setValues(props.name, _editor.getContents());
+    };
+
+    props.form.addBeforeSubmitListener(replaceImages);
   });
 
   onCleanup(() => {
@@ -151,7 +135,7 @@ export function SunEditor(props) {
   return (
     <>
       <canvas class="canvas" ref={canvas} width="800" height="600"></canvas>
-      <textarea ref={area}></textarea>
+      <textarea name={props.name} ref={area}></textarea>
     </>
   );
 }
