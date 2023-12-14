@@ -29,6 +29,11 @@ export function Form(props) {
       return anyTouched?.();
     },
   });
+  const beforeSubmitListeners = [];
+
+  const addBeforeSubmitListener = (fn) => {
+    beforeSubmitListeners.push(fn);
+  };
 
   anyTouched = createMemo(() =>
     Object.values(touched).some((isTouched) => isTouched)
@@ -67,18 +72,22 @@ export function Form(props) {
   const submitHandler = async (ev) => {
     ev.preventDefault();
     let errored = false;
+    const rawValues = unwrap(values);
 
-    for (const name of Object.keys(values)) {
+    for (const name of Object.keys(rawValues)) {
       const fieldEl = formEl.elements[name];
-      if (!fieldEl) break;
+      if (!fieldEl) continue;
       await checkValid(fieldEl);
       if (!errored && fieldEl.validationMessage) {
         fieldEl.focus();
         errored = true;
       }
     }
+    for (const fn of beforeSubmitListeners) {
+      await fn();
+    }
     if (!errored) {
-      local.submitHandler(unwrap(values), ev.submitter);
+      local.submitHandler(rawValues, ev.submitter);
     }
   };
 
@@ -112,6 +121,7 @@ export function Form(props) {
             setValues,
             setErrors,
             setTouched,
+            addBeforeSubmitListener,
           })
         : local.children}
     </form>
